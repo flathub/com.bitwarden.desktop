@@ -10,6 +10,7 @@ finish-args:
   - --share=ipc
   - --socket=x11
   - --share=network
+  - --talk-name=org.freedesktop.Notifications
 build-options:
   cflags: -O2 -g
   cxxflags: -O2 -g
