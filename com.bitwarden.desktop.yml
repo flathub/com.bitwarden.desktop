@@ -11,6 +11,7 @@ finish-args:
   - --socket=x11
   - --share=network
   - --talk-name=org.freedesktop.Notifications
+  - --talk-name=org.freedesktop.secrets
 build-options:
   cflags: -O2 -g
   cxxflags: -O2 -g
