@@ -19,7 +19,7 @@ build-options:
     NPM_CONFIG_LOGLEVEL: info
 modules:
   - name: nodejs
-    cleanup: 
+    cleanup:
       - /include
       - /share
       - /app/lib/node_modules/npm/changelogs
