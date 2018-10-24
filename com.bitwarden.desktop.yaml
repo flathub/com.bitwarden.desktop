@@ -72,7 +72,7 @@ modules:
       - generated-sources.json
       - type: git
         url: https://github.com/bitwarden/desktop
-        commit: 06a95f51978dd3239f949cc0b12387e88b16f73b
+        commit: 8efa46683a3753c92af1a9cee41ced92873cefc5
         dest: main
       - type: patch
         path: webfonts.patch
