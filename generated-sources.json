@@ -363,18 +363,18 @@
         "url": "https://registry.npmjs.org/@angular/upgrade/-/upgrade-6.1.7.tgz"
     },
     {
-        "dest": "npm-cache/_cacache/content-v2/sha512/f2/73",
-        "dest-filename": "d26aba7893ea0fd8ce8feedc3615931738c47ceb01fd18f6ffe308aa035f1ce03b3cf12526134a52a673503c33a8586323eb2f45d97cf9272a329c23d759",
-        "sha512": "f273d26aba7893ea0fd8ce8feedc3615931738c47ceb01fd18f6ffe308aa035f1ce03b3cf12526134a52a673503c33a8586323eb2f45d97cf9272a329c23d759",
+        "dest": "npm-cache/_cacache/content-v2/sha512/ab/b1",
+        "dest-filename": "cc95364f91909aff451c96c5ef132a8d8aba6345f46ec218c47800c3d62ea9a9ed18c793b0b823bbf97b1ce8c34a47cbc4d42f4ccb19d28f449e72f51b4c",
+        "sha512": "abb1cc95364f91909aff451c96c5ef132a8d8aba6345f46ec218c47800c3d62ea9a9ed18c793b0b823bbf97b1ce8c34a47cbc4d42f4ccb19d28f449e72f51b4c",
         "type": "file",
-        "url": "https://registry.npmjs.org/@aspnet/signalr/-/signalr-1.0.3.tgz"
+        "url": "https://registry.npmjs.org/@aspnet/signalr/-/signalr-1.0.4.tgz"
     },
     {
-        "dest": "npm-cache/_cacache/content-v2/sha512/47/90",
-        "dest-filename": "91a715c62028b44e06ddf3ab80f1b0bbe519b4cbb629ea80fcec835f2b1b1abff9bfc5bcf7deb906388d4e6487ec73f27afd6539cf406aa5cd908187da25",
-        "sha512": "479091a715c62028b44e06ddf3ab80f1b0bbe519b4cbb629ea80fcec835f2b1b1abff9bfc5bcf7deb906388d4e6487ec73f27afd6539cf406aa5cd908187da25",
+        "dest": "npm-cache/_cacache/content-v2/sha512/9f/01",
+        "dest-filename": "b092ba288ce2e68ef5789f26df06ac37192e3cf0cc7d858a18e6930350a35278d38f09e8cd78299d14f7f573fc409d5db8782e0ed572a8940ec8188ec5cf",
+        "sha512": "9f01b092ba288ce2e68ef5789f26df06ac37192e3cf0cc7d858a18e6930350a35278d38f09e8cd78299d14f7f573fc409d5db8782e0ed572a8940ec8188ec5cf",
         "type": "file",
-        "url": "https://registry.npmjs.org/@aspnet/signalr-protocol-msgpack/-/signalr-protocol-msgpack-1.0.3.tgz"
+        "url": "https://registry.npmjs.org/@aspnet/signalr-protocol-msgpack/-/signalr-protocol-msgpack-1.0.4.tgz"
     },
     {
         "dest": "npm-cache/_cacache/content-v2/sha512/c4/4a",
@@ -2295,60 +2295,60 @@
         "url": "https://registry.npmjs.org/ejs/-/ejs-2.6.1.tgz"
     },
     {
-        "dest": "npm-cache/_cacache/content-v2/sha512/31/1a",
-        "dest-filename": "c313a9aba7e66b201a59336ee9c5b3b6c840ca61f92673a2e5efd06d79d30d119b18e3ea1b96ea5e0c92fa44cea6794229f3628ca3add6edf3fae536fcf5",
-        "sha512": "311ac313a9aba7e66b201a59336ee9c5b3b6c840ca61f92673a2e5efd06d79d30d119b18e3ea1b96ea5e0c92fa44cea6794229f3628ca3add6edf3fae536fcf5",
+        "dest": "npm-cache/_cacache/content-v2/sha512/6c/54",
+        "dest-filename": "cc0d03777a97e2ca6a933dd81f7f24f1bb2ffb039dac2245bb1e8b3e858e572cf02b3972d700ac7526d07774cec270f7d96bee6aa7f27770f0a2761e565e",
+        "sha512": "6c54cc0d03777a97e2ca6a933dd81f7f24f1bb2ffb039dac2245bb1e8b3e858e572cf02b3972d700ac7526d07774cec270f7d96bee6aa7f27770f0a2761e565e",
         "type": "file",
-        "url": "https://registry.npmjs.org/electron/-/electron-2.0.7.tgz"
+        "url": "https://registry.npmjs.org/electron/-/electron-2.0.11.tgz"
     },
     {
         "dest": "npm-cache",
         "only-arches": [
             "i386"
         ],
-        "sha256": "49a5537084c19ff29ec7caeb54739b4be9ee93b291c5663fdcc36bc1cd26cbdf",
+        "sha256": "0b6ebf929bb0307679e0331ba8f18a1abde5475590ca9fd3dda0f0faa985f7ed",
         "type": "file",
-        "url": "https://github.com/electron/electron/releases/download/v2.0.7/electron-v2.0.7-linux-ia32.zip"
+        "url": "https://github.com/electron/electron/releases/download/v2.0.11/electron-v2.0.11-linux-ia32.zip"
     },
     {
         "dest": "npm-cache",
         "only-arches": [
             "x86_64"
         ],
-        "sha256": "617f547285452940cf6be8af22075640989261f3f6fae8ab327426f0434b446c",
+        "sha256": "6e26a8fcc2a89111276324a343265e6735014e1a9fcb44e5a61ce7592dba1508",
         "type": "file",
-        "url": "https://github.com/electron/electron/releases/download/v2.0.7/electron-v2.0.7-linux-x64.zip"
+        "url": "https://github.com/electron/electron/releases/download/v2.0.11/electron-v2.0.11-linux-x64.zip"
     },
     {
         "dest": "npm-cache",
         "only-arches": [
             "arm"
         ],
-        "sha256": "991631f72d82cb5e20ebbbd9c9ca5cde1334f403a37c7c6b5223ec6360a4ed71",
+        "sha256": "5d32fbaa26436600464c36f58048695e70164be9095e3bf3b67c3fc92ef065d1",
         "type": "file",
-        "url": "https://github.com/electron/electron/releases/download/v2.0.7/electron-v2.0.7-linux-arm.zip"
+        "url": "https://github.com/electron/electron/releases/download/v2.0.11/electron-v2.0.11-linux-arm.zip"
     },
     {
         "dest": "npm-cache",
         "only-arches": [
             "aarch64"
         ],
-        "sha256": "a22c58e839fe492c3950e2fe25f5fb6664083faacb88df8997bb061c0e5015a2",
+        "sha256": "fe125cf100acca75be40da85326694cc0d74d855c0246380f9fa6ba924318d37",
         "type": "file",
-        "url": "https://github.com/electron/electron/releases/download/v2.0.7/electron-v2.0.7-linux-arm64.zip"
+        "url": "https://github.com/electron/electron/releases/download/v2.0.11/electron-v2.0.11-linux-arm64.zip"
     },
     {
         "dest": "npm-cache",
-        "dest-filename": "SHASUMS256.txt-2.0.7",
+        "dest-filename": "SHASUMS256.txt-2.0.11",
         "type": "file",
-        "url": "data:49a5537084c19ff29ec7caeb54739b4be9ee93b291c5663fdcc36bc1cd26cbdf%20%2Aelectron-v2.0.7-linux-ia32.zip%0A617f547285452940cf6be8af22075640989261f3f6fae8ab327426f0434b446c%20%2Aelectron-v2.0.7-linux-x64.zip%0A991631f72d82cb5e20ebbbd9c9ca5cde1334f403a37c7c6b5223ec6360a4ed71%20%2Aelectron-v2.0.7-linux-arm.zip%0Aa22c58e839fe492c3950e2fe25f5fb6664083faacb88df8997bb061c0e5015a2%20%2Aelectron-v2.0.7-linux-arm64.zip%0A"
+        "url": "data:0b6ebf929bb0307679e0331ba8f18a1abde5475590ca9fd3dda0f0faa985f7ed%20%2Aelectron-v2.0.11-linux-ia32.zip%0A6e26a8fcc2a89111276324a343265e6735014e1a9fcb44e5a61ce7592dba1508%20%2Aelectron-v2.0.11-linux-x64.zip%0A5d32fbaa26436600464c36f58048695e70164be9095e3bf3b67c3fc92ef065d1%20%2Aelectron-v2.0.11-linux-arm.zip%0Afe125cf100acca75be40da85326694cc0d74d855c0246380f9fa6ba924318d37%20%2Aelectron-v2.0.11-linux-arm64.zip%0A"
     },
     {
-        "dest": "npm-cache/_cacache/content-v2/sha512/a2/99",
-        "dest-filename": "3a6cb2c4acb4b0c955497921f9124ed958e052b0dd09aef5d335518b5cb017281f7195361a8eba65478e3157232b99bbadf781fab89f63ab333fd768f190",
-        "sha512": "a2993a6cb2c4acb4b0c955497921f9124ed958e052b0dd09aef5d335518b5cb017281f7195361a8eba65478e3157232b99bbadf781fab89f63ab333fd768f190",
+        "dest": "npm-cache/_cacache/content-v2/sha512/48/be",
+        "dest-filename": "8a85f33b3d3aa21666c25b779537054167ef3c32bcdbbaf9fda253ec7efe3799b89668563e9d1733fd318692ed3f95cd857a974c6c899d318d49ad0fb36f",
+        "sha512": "48be8a85f33b3d3aa21666c25b779537054167ef3c32bcdbbaf9fda253ec7efe3799b89668563e9d1733fd318692ed3f95cd857a974c6c899d318d49ad0fb36f",
         "type": "file",
-        "url": "https://registry.npmjs.org/@types/node/-/node-8.10.26.tgz"
+        "url": "https://registry.npmjs.org/@types/node/-/node-8.10.36.tgz"
     },
     {
         "dest": "npm-cache/_cacache/content-v2/sha512/8e/ca",
@@ -2869,11 +2869,11 @@
         "url": "https://registry.npmjs.org/es-to-primitive/-/es-to-primitive-1.1.1.tgz"
     },
     {
-        "dest": "npm-cache/_cacache/content-v2/sha512/fc/d7",
-        "dest-filename": "4d655260fae660b66f5e4b73ba96b38b62641a8360e37445ee3da1e567a46e56a82a69565f81809ea4420ab0bab075002b38fb42dd7cd12ea1867d3f0a41",
-        "sha512": "fcd74d655260fae660b66f5e4b73ba96b38b62641a8360e37445ee3da1e567a46e56a82a69565f81809ea4420ab0bab075002b38fb42dd7cd12ea1867d3f0a41",
+        "dest": "npm-cache/_cacache/content-v2/sha512/9f/ac",
+        "dest-filename": "2fa5d138dd516d26afa550360304553057c4d96ee1972d5e03eb029a7e0d7795dce72acc84bdab6e6e79947b7d7372f7a54b338717e5db693f8197d39b0e",
+        "sha512": "9fac2fa5d138dd516d26afa550360304553057c4d96ee1972d5e03eb029a7e0d7795dce72acc84bdab6e6e79947b7d7372f7a54b338717e5db693f8197d39b0e",
         "type": "file",
-        "url": "https://registry.npmjs.org/es6-promise/-/es6-promise-4.2.4.tgz"
+        "url": "https://registry.npmjs.org/es6-promise/-/es6-promise-4.2.5.tgz"
     },
     {
         "dest": "npm-cache/_cacache/content-v2/sha1/5c/b9",
@@ -5277,18 +5277,18 @@
         "url": "https://registry.npmjs.org/ms/-/ms-2.0.0.tgz"
     },
     {
-        "dest": "npm-cache/_cacache/content-v2/sha512/b5/09",
-        "dest-filename": "119703b87f7fc4f0aab9aa6e8f715c3e27e2b8f94fd736a783f446e8d6a56cae391c29bd857e676dbae22c970e360864fe2b7655280bca7d23e9dd046995",
-        "sha512": "b509119703b87f7fc4f0aab9aa6e8f715c3e27e2b8f94fd736a783f446e8d6a56cae391c29bd857e676dbae22c970e360864fe2b7655280bca7d23e9dd046995",
+        "dest": "npm-cache/_cacache/content-v2/sha512/5e/8e",
+        "dest-filename": "e713d65f055a27422d6b4a8a4d02a3ddb6cfd01f2b92114c0813302407e57616d9a490b51b3fa33256a555431b19608eb9169bd6dc16fc67d6561236e01d",
+        "sha512": "5e8ee713d65f055a27422d6b4a8a4d02a3ddb6cfd01f2b92114c0813302407e57616d9a490b51b3fa33256a555431b19608eb9169bd6dc16fc67d6561236e01d",
         "type": "file",
-        "url": "https://registry.npmjs.org/msgpack5/-/msgpack5-4.2.0.tgz"
+        "url": "https://registry.npmjs.org/msgpack5/-/msgpack5-4.2.1.tgz"
     },
     {
-        "dest": "npm-cache/_cacache/content-v2/sha512/16/b3",
-        "dest-filename": "202ee901f63ba3bc9f76a794c0d2170a207b489d55d78710fbaa002e57b93471b3edf5449998e6278435c7e88b2719e2148255f8d9348157b1a7e2ae6c6d",
-        "sha512": "16b3202ee901f63ba3bc9f76a794c0d2170a207b489d55d78710fbaa002e57b93471b3edf5449998e6278435c7e88b2719e2148255f8d9348157b1a7e2ae6c6d",
+        "dest": "npm-cache/_cacache/content-v2/sha512/61/39",
+        "dest-filename": "b39663f20ae2861524cb2f73fb9e564793e0830b775d7a1093fbf670708df98d48e7a5f49796b000af78481280fffb84ef2b2dbbbcca7bc9cfeaf1a6bab4",
+        "sha512": "6139b39663f20ae2861524cb2f73fb9e564793e0830b775d7a1093fbf670708df98d48e7a5f49796b000af78481280fffb84ef2b2dbbbcca7bc9cfeaf1a6bab4",
         "type": "file",
-        "url": "https://registry.npmjs.org/bl/-/bl-2.0.1.tgz"
+        "url": "https://registry.npmjs.org/bl/-/bl-2.1.1.tgz"
     },
     {
         "dest": "npm-cache/_cacache/content-v2/sha1/2a/8f",
