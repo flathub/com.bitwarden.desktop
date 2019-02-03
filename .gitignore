@@ -1,2 +1,5 @@
 .flatpak-builder/
+.idea/
 build/
+
+*.iml
