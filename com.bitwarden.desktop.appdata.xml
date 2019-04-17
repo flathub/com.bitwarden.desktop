@@ -48,7 +48,7 @@
   <developer_name>8bit Solutions LLC</developer_name>
   <update_contact>hello@bitwarden.com</update_contact>
   <releases>
-    <release version="1.9.0" date="2018-10-16"/>
+    <release version="1.14.0" date="2019-03-13"/>
   </releases>
   <content_rating type="oars-1.0"/>
 </component>
