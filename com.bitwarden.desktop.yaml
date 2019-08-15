@@ -48,5 +48,5 @@ modules:
       - cp -r usr/* ${FLATPAK_DEST}
       - mkdir -p ${FLATPAK_DEST}/bin
       - cp -r opt/Bitwarden/* ${FLATPAK_DEST}/bin
-      - desktop-file-edit --set-key=Exec --set-value=${FLATPAK_DEST}/bin/bitwarden ${FLATPAK_DEST}/share/applications/bitwarden.desktop 
+      - desktop-file-edit --set-key=Exec --set-value="${FLATPAK_DEST}/bin/bitwarden --no-sandbox" ${FLATPAK_DEST}/share/applications/bitwarden.desktop 
       - install -Dm644 -t /app/share/metainfo ${FLATPAK_ID}.appdata.xml
