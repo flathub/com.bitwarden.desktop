@@ -12,6 +12,7 @@ finish-args:
   - --share=network
   - --talk-name=org.freedesktop.Notifications
   - --talk-name=org.freedesktop.secrets
+  - --filesystem=xdg-download
 rename-desktop-file: bitwarden.desktop
 rename-icon: bitwarden
 modules:
