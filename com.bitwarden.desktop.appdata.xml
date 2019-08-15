@@ -49,7 +49,17 @@
   <developer_name>8bit Solutions LLC</developer_name>
   <update_contact>hello@bitwarden.com</update_contact>
   <releases>
-    <release version="1.14.0" date="2019-03-13"/>
+    <release version="1.15.2" date="2019-08-01">
+      <description>
+        <ul>
+          <li>Client events for organizations</li>
+          <li>New passphrase generator options for capitalization and include a number</li>
+          <li>UI updates for macOS users</li>
+          <li>Bug fixes</li>
+          <li>Language updates</li>
+        </ul>
+      </description>
+    </release>
   </releases>
   <content_rating type="oars-1.0"/>
 </component>

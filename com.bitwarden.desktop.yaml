@@ -37,8 +37,8 @@ modules:
       - type: file
         only-arches:
           - x86_64
-        url: https://github.com/bitwarden/desktop/releases/download/v1.14.0/Bitwarden-1.14.0-amd64.deb
-        sha256: ea645842053d9d05fb3c12cca6dfec2864b1eb5836f8d4d197220e0be16f7464
+        url: https://github.com/bitwarden/desktop/releases/download/v1.15.2/Bitwarden-1.15.2-amd64.deb
+        sha256: 8ec42628a709ac436a1106d8b9cc04c882a4e1f2b3ccee64cb5f608ef184e47b
       - type: file
         path: com.bitwarden.desktop.appdata.xml
     buildsystem: simple
