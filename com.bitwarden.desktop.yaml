@@ -1,9 +1,9 @@
 app-id: com.bitwarden.desktop
-base: org.electronjs.Electron2.BaseApp
-base-version: '18.08'
 runtime: org.freedesktop.Platform
-runtime-version: '18.08'
+runtime-version: '19.08'
 sdk: org.freedesktop.Sdk
+base: org.electronjs.Electron2.BaseApp
+base-version: '19.08'
 command: bitwarden
 separate-locales: false
 finish-args:
@@ -19,26 +19,21 @@ modules:
   - name: libsecret
     sources:
       - type: archive
-        url: https://gitlab.gnome.org/GNOME/libsecret/-/archive/0.18.8/libsecret-0.18.8.tar.gz
-        sha256: 33ee5dfd3556931b81d47111890c8b9c51093b4ced18e0e87f51c1769e24d43c
+        url: https://gitlab.gnome.org/GNOME/libsecret/-/archive/0.19.1/libsecret-0.19.1.tar.gz
+        sha256: 303c6e8cf3e12534e885b0682cd6130716c6834397b76d3829321b6d83b2389c
     config-opts:
-      - --disable-manpages
-      - --disable-gtk-doc
-      - --disable-static
-      - --disable-introspection
-    cleanup:
-      - /bin
-      - /include
-      - /lib/*.la
-      - /lib/pkgconfig
+      - '-Dmanpage=false'
+      - '-Dgtk_doc=false'
+      - '-Dvapi=false'
+    buildsystem: meson
 
   - name: bitwarden
     sources:
       - type: file
         only-arches:
           - x86_64
-        url: https://github.com/bitwarden/desktop/releases/download/v1.15.2/Bitwarden-1.15.2-amd64.deb
-        sha256: 8ec42628a709ac436a1106d8b9cc04c882a4e1f2b3ccee64cb5f608ef184e47b
+        url: https://github.com/bitwarden/desktop/releases/download/v1.16.4/Bitwarden-1.16.4-amd64.deb
+        sha256: d500eaf4c2d4899cbfc360bf75fdcf3ad5ddcf6aa7b9491328bd1e8d659734bd
       - type: file
         path: com.bitwarden.desktop.appdata.xml
     buildsystem: simple
