@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <!-- Copyright 2018-2019 Flathub maintainers -->
 <component type="desktop">
   <id>com.bitwarden.desktop</id>
@@ -52,17 +52,7 @@
   <developer_name>8bit Solutions LLC</developer_name>
   <update_contact>hello@bitwarden.com</update_contact>
   <releases>
-    <release version="1.15.2" date="2019-08-01">
-      <description>
-        <ul>
-          <li>Client events for organizations</li>
-          <li>New passphrase generator options for capitalization and include a number</li>
-          <li>UI updates for macOS users</li>
-          <li>Bug fixes</li>
-          <li>Language updates</li>
-        </ul>
-      </description>
-    </release>
+    <release version="1.16.4" date="2019-09-24" />
   </releases>
-  <content_rating type="oars-1.0"/>
+  <content_rating type="oars-1.0" />
 </component>
