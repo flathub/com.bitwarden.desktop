@@ -21,19 +21,11 @@ modules:
       - type: archive
         url: https://gitlab.gnome.org/GNOME/libsecret/-/archive/0.19.1/libsecret-0.19.1.tar.gz
         sha256: 303c6e8cf3e12534e885b0682cd6130716c6834397b76d3829321b6d83b2389c
-      - type: shell
-        commands:
-          - 'autoreconf -vfi'
     config-opts:
-      - --disable-manpages
-      - --disable-gtk-doc
-      - --disable-static
-      - --disable-introspection
-    cleanup:
-      - /bin
-      - /include
-      - /lib/*.la
-      - /lib/pkgconfig
+      - '-Dmanpage=false'
+      - '-Dgtk_doc=false'
+      - '-Dvapi=false'
+    buildsystem: meson
 
   - name: bitwarden
     sources:
