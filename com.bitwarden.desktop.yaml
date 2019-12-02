@@ -27,6 +27,12 @@ modules:
       - '-Dvapi=false'
     buildsystem: meson
 
+  - name: zypak
+    sources:
+      - type: git
+        url: https://github.com/refi64/zypak
+        tag: v2019.11beta.3
+
   - name: bitwarden
     sources:
       - type: file
@@ -37,7 +43,7 @@ modules:
       - type: script
         dest-filename: bitwarden.sh
         commands:
-          - 'exec env TMPDIR=$XDG_CACHE_HOME /app/Bitwarden/bitwarden --no-sandbox "$@"'
+          - 'exec env TMPDIR=$XDG_CACHE_HOME zypak-wrapper /app/Bitwarden/bitwarden "$@"'
       - type: file
         path: com.bitwarden.desktop.appdata.xml
     buildsystem: simple
