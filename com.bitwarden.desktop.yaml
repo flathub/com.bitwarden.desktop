@@ -30,7 +30,8 @@ modules:
       - type: script
         dest-filename: bitwarden.sh
         commands:
-          - 'exec env TMPDIR=$XDG_CACHE_HOME /app/Bitwarden/bitwarden --no-sandbox "$@"'
+          - export TMPDIR="$XDG_RUNTIME_DIR/app/$FLATPAK_ID"
+          - exec zypak-wrapper /app/Bitwarden/bitwarden "$@"
       - type: file
         path: com.bitwarden.desktop.appdata.xml
     buildsystem: simple
