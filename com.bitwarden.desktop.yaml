@@ -20,13 +20,13 @@ rename-icon: bitwarden
 modules:
   - shared-modules/libsecret/libsecret.json
 
-  - name: bitwarden
+  - name: Bitwarden
     sources:
       - type: file
         only-arches:
           - x86_64
-        url: https://github.com/bitwarden/desktop/releases/download/v1.16.6/Bitwarden-1.16.6-amd64.deb
-        sha256: 528200af3a509e87c61ed1a100401ac714729ae6061e0bad404c52f948c5901c
+        url: https://github.com/bitwarden/desktop/releases/download/v1.17.2/Bitwarden-1.17.2-amd64.deb
+        sha256: fd47d445315ed2ee26d7bcb02857d7ee09961e038fdbe915b6d7373d24cff46c
       - type: script
         dest-filename: bitwarden.sh
         commands:
