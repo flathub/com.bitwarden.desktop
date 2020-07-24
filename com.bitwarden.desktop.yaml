@@ -25,8 +25,8 @@ modules:
       - type: file
         only-arches:
           - x86_64
-        url: https://github.com/bitwarden/desktop/releases/download/v1.18.0/Bitwarden-1.18.0-amd64.deb
-        sha256: 7274aef4561acea830e4c87a33fc59cdb91c196ce1cafbab2ec63126c7f03913
+        url: https://github.com/bitwarden/desktop/releases/download/v1.19.0/Bitwarden-1.19.0-amd64.deb
+        sha256: 3c2d05e9015e81c86d23d7d065c8d47d20082512463c8e3efd5c82e8b17d149b
       - type: script
         dest-filename: bitwarden.sh
         commands:
