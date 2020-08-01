@@ -25,13 +25,14 @@ modules:
       - type: file
         only-arches:
           - x86_64
-        url: https://github.com/bitwarden/desktop/releases/download/v1.20.0/Bitwarden-1.20.0-amd64.deb
+        url: https://github-production-release-asset-2e65be.s3.amazonaws.com/76930145/38fdb880-d18c-11ea-84e3-653b6f992ab2?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIWNJYAX4CSVEH53A%2F20200801%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20200801T052313Z&X-Amz-Expires=300&X-Amz-Signature=8bebb263c51d85a4f98c48203f9d85cb57dddef17b4f01f94c38f4c2939847b3&X-Amz-SignedHeaders=host&actor_id=0&repo_id=76930145&response-content-disposition=attachment%3B+filename%3DBitwarden-1.20.0-amd64.deb&response-content-type=application%2Foctet-stream
         sha256: 1ea58f4786bb831c1437397fddf5da863c30ca18c431b2a76643040c8461b314
         x-checker-data:
           type: html
           url: https://github.com/bitwarden/desktop/releases
-          version-pattern: 'Bitwarden-([\d\.]+)-amd64.deb'
+          version-pattern: Bitwarden-([\d\.]+)-amd64.deb
           url-template: https://github.com/bitwarden/desktop/releases/download/v$version/Bitwarden-$version-amd64.deb
+        size: 47955534
       - type: script
         dest-filename: bitwarden.sh
         commands:
@@ -41,12 +42,12 @@ modules:
         path: com.bitwarden.desktop.appdata.xml
     buildsystem: simple
     build-commands:
-      - 'ar -x Bitwarden*.deb'
-      - 'rm -f Bitwarden*.deb'
-      - 'tar -xf data.tar.xz'
-      - 'rm -f control.tar.gz data.tar.xz debian-binary'
-      - 'cp -r opt/* usr/* $FLATPAK_DEST'
-      - 'rm -rf opt usr'
-      - 'install bitwarden.sh $FLATPAK_DEST/bin/bitwarden'
-      - 'install -D -m 644 -t $FLATPAK_DEST/share/metainfo $FLATPAK_ID.appdata.xml'
-      - 'desktop-file-edit --set-key=Exec --set-value="bitwarden %U" $FLATPAK_DEST/share/applications/bitwarden.desktop'
+      - ar -x Bitwarden*.deb
+      - rm -f Bitwarden*.deb
+      - tar -xf data.tar.xz
+      - rm -f control.tar.gz data.tar.xz debian-binary
+      - cp -r opt/* usr/* $FLATPAK_DEST
+      - rm -rf opt usr
+      - install bitwarden.sh $FLATPAK_DEST/bin/bitwarden
+      - install -D -m 644 -t $FLATPAK_DEST/share/metainfo $FLATPAK_ID.appdata.xml
+      - desktop-file-edit --set-key=Exec --set-value="bitwarden %U" $FLATPAK_DEST/share/applications/bitwarden.desktop
