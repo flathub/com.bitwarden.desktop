@@ -1,9 +1,9 @@
 app-id: com.bitwarden.desktop
 runtime: org.freedesktop.Platform
-runtime-version: '19.08'
+runtime-version: '20.08'
 sdk: org.freedesktop.Sdk
 base: org.electronjs.Electron2.BaseApp
-base-version: '19.08'
+base-version: '20.08'
 command: bitwarden
 separate-locales: false
 finish-args:
@@ -25,8 +25,8 @@ modules:
       - type: file
         only-arches:
           - x86_64
-        url: https://github.com/bitwarden/desktop/releases/download/v1.20.0/Bitwarden-1.20.0-amd64.deb
-        sha256: 1ea58f4786bb831c1437397fddf5da863c30ca18c431b2a76643040c8461b314
+        url: https://github.com/bitwarden/desktop/releases/download/v1.22.2/Bitwarden-1.22.2-amd64.deb
+        sha256: c58ce8118b7cb4df4cc5f8031289a2cdfff8adc8a77410d6780d340a3928a5fb
       - type: script
         dest-filename: bitwarden.sh
         commands:
