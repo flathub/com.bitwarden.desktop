@@ -52,7 +52,7 @@
   <developer_name>8bit Solutions LLC</developer_name>
   <update_contact>hello@bitwarden.com</update_contact>
   <releases>
-    <release version="1.22.2" date="2020-09-29" />
+    <release version="1.23.1" date="2020-12-02" />
   </releases>
   <content_rating type="oars-1.1" />
 </component>
