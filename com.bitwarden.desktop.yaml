@@ -1,11 +1,17 @@
 app-id: com.bitwarden.desktop
 runtime: org.freedesktop.Platform
-runtime-version: '22.08'
+runtime-version: "22.08"
 sdk: org.freedesktop.Sdk
 base: org.electronjs.Electron2.BaseApp
-base-version: '22.08'
+base-version: "22.08"
+separate-locales: false
 command: bitwarden
+sdk-extensions:
+  # https://github.com/bitwarden/clients/blob/e2c25c6aad47d1e086ee8bb749e413cd93f89ca8/.nvmrc
+  - org.freedesktop.Sdk.Extension.node16
+  - org.freedesktop.Sdk.Extension.rust-stable
 finish-args:
+  - --device=dri
   - --share=ipc
   - --share=network
   - --socket=wayland
@@ -17,40 +23,93 @@ finish-args:
   - --talk-name=org.freedesktop.secrets
   - --talk-name=com.canonical.AppMenu.Registrar
   - --filesystem=xdg-download
-rename-desktop-file: bitwarden.desktop
-rename-icon: bitwarden
 modules:
   - shared-modules/libsecret/libsecret.json
 
   - name: bitwarden-desktop
     buildsystem: simple
-    build-commands:
-      - ar -x Bitwarden*.deb
-      - rm -f Bitwarden*.deb
-      - tar -xf data.tar.xz
-      - rm -f control.tar.gz data.tar.xz debian-binary
-      - cp -r opt/* usr/* $FLATPAK_DEST
-      - rm -rf opt usr
-      - install bitwarden.sh $FLATPAK_DEST/bin/bitwarden
-      - install -D -m 644 -t $FLATPAK_DEST/share/metainfo $FLATPAK_ID.metainfo.xml
-      - desktop-file-edit --set-key=Exec --set-value="bitwarden %U" $FLATPAK_DEST/share/applications/bitwarden.desktop
-      - rm -rf "${FLATPAK_DEST}/share/icons/hicolor/1024x1024/"
+    build-options:
+      # Add the node bin directory.
+      append-path: "/usr/lib/sdk/node16/bin:/run/build/bitwarden/flatpak-node/chromedrive"
+      env:
+        # Don't add ELECTRON_CACHE
+        XDG_CACHE_HOME: /run/build/bitwarden/flatpak-node/cache
+        npm_config_nodedir: /usr/lib/sdk/node16
+        npm_config_offline: "true"
+        npm_config_no_save: "true"
+        npm_config_cache: /run/build/bitwarden/flatpak-node/npm-cache
+        npm_config_loglevel: "verbose"
+        # https://stackoverflow.com/questions/25146976/can-i-get-npm-gyp-to-use-ccache
+        CXX: ccache g++
+        ELECTRON_SKIP_BINARY_DOWNLOAD: "true"
 
-      # To allow separate locales
-      # https://searchfox.org/mozilla-central/rev/8a4f55bc09ffc5c25dcb4586c51ae4a9fee77b4c/taskcluster/docker/firefox-flatpak/runme.sh#131-133
-      - |
-        for lang in ${FLATPAK_DEST}/Bitwarden/locales/*.pak
-        do
-          locale="$(basename -s .pak $lang)"
-          install -Dm644 -t "${FLATPAK_DEST}/share/runtime/locale/${locale%%-*}/" "$lang"
-          ln -sf "${FLATPAK_DEST}/share/runtime/locale/${locale%%-*}/$(basename $lang)" "${FLATPAK_DEST}/Bitwarden/locales/$(basename $lang)"
-        done
+      arch:
+        # https://github.com/sass/node-sass/issues/3033#issuecomment-763180778
+        # The architecture of Electron, see https://electronjs.org/docs/tutorial/support#supported-platforms
+        # for supported architectures.
+        i386:
+          env:
+            npm_config_arch: ia32
+            npm_config_target_arch: ia32
+        x86_64:
+          env:
+            npm_config_arch: x64
+            npm_config_target_arch: x64
+        arm:
+          env:
+            npm_config_arch: armv7l
+            npm_config_target_arch: armv7l
+        aarch64:
+          env:
+            npm_config_arch: arm64
+            npm_config_target_arch: arm64
+    build-commands:
+      # # Remove webfonts job to fetch opensans
+      # # https://github.com/flathub/flathub/pull/547#issuecomment-416207800
+      # - sed -i -e 's/gulp prebuild:renderer && //' package.json
+      # - sed -i '/@import "..\/css\/webfonts.css";/d' src/scss/styles.scss
+      # - sed -i -e 's/\$font-family-sans-serif:.*$/$font-family-sans-serif:\
+      #   sans-serif;/' src/scss/variables.scss
+      # - sed -i -e 's/\$font-family-monospace:.*$/$font-family-monospace:\
+      #   monospace;/' src/scss/variables.scss
+      #   # No need to rebuild native code here because electron-builder will take care of it
+      # - sed -i '/"postinstall"/d' package.json
+
+      # # Sometimes package.json and the lockfile are not in sync
+      # # In that case, do `npm install --prefix jslib` before generating sources
+      # - npm install --prefix jslib
+      # # Although the upstream includes all deps in the root, it makes more sense and is less
+      # # error-prone to install deps in src, in case they're not in-sync
+      # - npm install --prefix src
+
+      - npm ci --prefix=bitwarden --offline
+
+      - npm run --prefix=bitwarden/apps/desktop/desktop_native build:cross-platform
+
+      - npm run --prefix=bitwarden/apps/desktop dist:dir --${npm_config_arch}
+
+      # Remove unneeded files
+      - rm bitwarden/dist/linux-*unpacked/chrome-sandbox
+
+      # Copy the resulting, unpacked directory to /app.
+      - "cp -r bitwarden/dist/linux-*unpacked /app/bitwarden"
+
+      # Retire this at some point when an SVG is available
+      - for size in 16 32 64 128 256 512; do [[ -e
+        "bitwarden/apps/desktop/resources/icon.iconset/${size}x${size}.png" ]] && install -Dm644
+        "bitwarden/apps/desktop/resources/icon.iconset/${size}x${size}.png"
+        "/app/share/icons/hicolor/${size}x${size}/apps/${FLATPAK_ID}.png"; done
+
+      - install -Dm644 com.bitwarden.desktop.metainfo.xml
+        /app/share/metainfo/$FLATPAK_ID.metainfo.xml
+
+      - "install -Dm 755 bitwarden.sh /app/bin/bitwarden"
     sources:
-      - type: file
-        only-arches:
-          - x86_64
-        url: https://github.com/bitwarden/clients/releases/download/desktop-v2023.1.1/Bitwarden-2023.1.1-amd64.deb
-        sha256: 6cbdf26c4ae96398de0a2c45f2ab54fc3437e7153ee372bd697ade1eca0217b4
+      - type: git
+        url: https://github.com/bitwarden/clients.git
+        tag: desktop-v2023.1.1
+        # Checkout into a subdirectory so we can copy the whole thing to /app.
+        dest: bitwarden
         x-checker-data:
           type: anitya
           project-id: 179174
@@ -63,6 +122,10 @@ modules:
           - exec zypak-wrapper /app/Bitwarden/bitwarden "$@"
       - type: file
         path: com.bitwarden.desktop.metainfo.xml
+
+      # flatpak-node-generator --electron-node-headers npm package-lock.json
+      - node-sources.json
+      - cargo-sources.json
 
   - name: bitwarden-cli
     buildsystem: simple
