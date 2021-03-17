@@ -1,47 +1,151 @@
 app-id: com.bitwarden.desktop
+branch: stable
 runtime: org.freedesktop.Platform
 runtime-version: '20.08'
 sdk: org.freedesktop.Sdk
 base: org.electronjs.Electron2.BaseApp
 base-version: '20.08'
-command: bitwarden
 separate-locales: false
+command: start-bitwarden
+sdk-extensions:
+  # https://aur.archlinux.org/packages/bitwarden/?O=20&PP=10#comment-753128
+  - org.freedesktop.Sdk.Extension.node12
 finish-args:
+  - --device=dri
   - --share=ipc
+  # TODO: add wayland socket when electron supports wayland
+  # https://github.com/electron/electron/issues/10915
   - --socket=x11
   - --share=network
+  # Tray icon fixes: https://github.com/bitwarden/desktop/pull/84
   - --env=XDG_CURRENT_DESKTOP=Unity
   - --talk-name=org.kde.StatusNotifierWatcher
   - --talk-name=org.freedesktop.Notifications
   - --talk-name=org.freedesktop.secrets
   - --filesystem=xdg-download
-rename-desktop-file: bitwarden.desktop
-rename-icon: bitwarden
 modules:
   - shared-modules/libsecret/libsecret.json
 
-  - name: Bitwarden
+  - name: bitwarden
+    buildsystem: simple
+    build-options:
+      # Add the node bin directory.
+      append-path: '/usr/lib/sdk/node12/bin:/run/build/bitwarden/flatpak-node/chromedrive'
+      env:
+        # Don't add ELECTRON_CACHE
+        XDG_CACHE_HOME: /run/build/bitwarden/flatpak-node/cache
+        npm_config_nodedir: /usr/lib/sdk/node12
+        npm_config_offline: 'true'
+        npm_config_no_save: 'true'
+        npm_config_cache: /run/build/bitwarden/flatpak-node/npm-cache
+        npm_config_loglevel: 'verbose'
+        # https://stackoverflow.com/questions/25146976/can-i-get-npm-gyp-to-use-ccache
+        CXX: ccache g++
+        ELECTRON_SKIP_BINARY_DOWNLOAD: 'true'
+
+      arch:
+        # https://github.com/sass/node-sass/issues/3033#issuecomment-763180778
+        # The architecture of Electron, see https://electronjs.org/docs/tutorial/support#supported-platforms
+        # for supported architectures.
+        i386:
+          env:
+            npm_config_arch: ia32
+            npm_config_target_arch: ia32
+        x86_64:
+          env:
+            npm_config_arch: x64
+            npm_config_target_arch: x64
+        arm:
+          env:
+            npm_config_arch: armv7l
+            npm_config_target_arch: armv7l
+        aarch64:
+          env:
+            npm_config_arch: arm64
+            npm_config_target_arch: arm64
+    build-commands:
+      # Remove webfonts job to fetch opensans
+      # https://github.com/flathub/flathub/pull/547#issuecomment-416207800
+      - sed -i -e 's/gulp prebuild:renderer && //' package.json
+      - sed -i '/@import "..\/css\/webfonts.css";/d' src/scss/styles.scss
+      - sed -i -e 's/\$font-family-sans-serif:.*$/$font-family-sans-serif:\
+        sans-serif;/' src/scss/variables.scss
+      - sed -i -e 's/\$font-family-monospace:.*$/$font-family-monospace:\
+        monospace;/' src/scss/variables.scss
+        # No need to rebuild native code here because electron-builder will take care of it
+      - sed -i '/"postinstall"/d' package.json
+
+      # Sometimes package.json and the lockfile are not in sync
+      # In that case, do `npm install --prefix jslib` before generating sources
+      - npm install --prefix jslib
+      # Although the upstream includes all deps in the root, it makes more sense and is less
+      # error-prone to install deps in src, in case they're not in-sync
+      - npm install --prefix src
+      - npm install
+
+      - npm run build
+      # The lockfile must be copied, otherwise it won't build offline
+      - cp src/package-lock.json build/package-lock.json
+      # Install deps beforehand such that electron-builder doesn't have to
+      # since electron-builder doens't aware of the cache
+      - npm install --production --prefix build
+
+      # Note the flag difference for arch
+      - npx electron-builder --linux dir --${npm_config_arch}
+      
+      # Remove unneeded files
+      - rm dist/linux-*unpacked/chrome-sandbox
+
+      # Copy the resulting, unpacked directory to /app.
+      - 'cp -r dist/linux-*unpacked /app/bitwarden'
+
+      # Retire this at some point when an SVG is available
+      - for size in 16 32 64 128 256 512; do [[ -e
+        "resources/icons/${size}x${size}.png" ]] && install -Dm644
+        "resources/icons/${size}x${size}.png"
+        "/app/share/icons/hicolor/${size}x${size}/apps/${FLATPAK_ID}.png"; done
     sources:
+      - type: git
+        url: https://github.com/bitwarden/desktop.git
+        tag: v1.25.0
+        x-checker-data:
+          type: anitya
+          project-id: 179174
+          tag-template: v$version
+      # Add the flatpak-node-generator generated sources.
+      # Note to generate recursively with -r since the repo is composed by submodules
+      - generated-sources.json
+      # The lockfile has to be generated with Internet access
+      # Must put it under src to consume the patch
       - type: file
-        only-arches:
-          - x86_64
-        url: https://github.com/bitwarden/desktop/releases/download/v1.25.0/Bitwarden-1.25.0-amd64.deb
-        sha256: 0e7efdf74138a232217fdfa537f13d33024e06dff9c8d7e79badc68e2d568f05
-      - type: script
-        dest-filename: bitwarden.sh
-        commands:
-          - export TMPDIR="$XDG_RUNTIME_DIR/app/$FLATPAK_ID"
-          - exec zypak-wrapper /app/Bitwarden/bitwarden "$@"
-      - type: file
-        path: com.bitwarden.desktop.appdata.xml
+        path: package-lock.src.json
+        dest: src
+        dest-filename: package-lock.json
+  - name: start-script
     buildsystem: simple
     build-commands:
-      - 'ar -x Bitwarden*.deb'
-      - 'rm -f Bitwarden*.deb'
-      - 'tar -xf data.tar.xz'
-      - 'rm -f control.tar.gz data.tar.xz debian-binary'
-      - 'cp -r opt/* usr/* $FLATPAK_DEST'
-      - 'rm -rf opt usr'
-      - 'install bitwarden.sh $FLATPAK_DEST/bin/bitwarden'
-      - 'install -D -m 644 -t $FLATPAK_DEST/share/metainfo $FLATPAK_ID.appdata.xml'
-      - 'desktop-file-edit --set-key=Exec --set-value="bitwarden %U" $FLATPAK_DEST/share/applications/bitwarden.desktop'
+      # Install the wrapper script to start it.
+      - 'install -Dm 755 start-bitwarden.sh /app/bin/start-bitwarden'
+    sources:
+      # Our runner script.
+      - type: script
+        dest-filename: start-bitwarden.sh
+        commands:
+          # Use zypak to call the electron binary to enable sandboxing and prevents no sandbox error
+          - env TMPDIR="$XDG_RUNTIME_DIR/app/$FLATPAK_ID" GDK_BACKEND=wayland zypak-wrapper /app/bitwarden/bitwarden --enable-features=UseOzonePlatform --ozone-platform=wayland "$@"
+  - name: metainfo
+    buildsystem: simple
+    build-commands:
+      - install -Dm644 com.bitwarden.desktop.metainfo.xml
+        /app/share/metainfo/$FLATPAK_ID.metainfo.xml
+    sources:
+      - type: file
+        path: com.bitwarden.desktop.metainfo.xml
+  - name: desktop-entry
+    buildsystem: simple
+    build-commands:
+      - install -Dm644 com.bitwarden.desktop.desktop
+        /app/share/applications/$FLATPAK_ID.desktop
+    sources:
+      - type: file
+        path: com.bitwarden.desktop.desktop
