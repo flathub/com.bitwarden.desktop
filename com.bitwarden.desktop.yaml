@@ -25,8 +25,8 @@ modules:
       - type: file
         only-arches:
           - x86_64
-        url: https://github.com/bitwarden/desktop/releases/download/v1.25.0/Bitwarden-1.25.0-amd64.deb
-        sha256: 0e7efdf74138a232217fdfa537f13d33024e06dff9c8d7e79badc68e2d568f05
+        url: https://github.com/bitwarden/desktop/releases/download/v1.25.1/Bitwarden-1.25.1-amd64.deb
+        sha256: bf8d5f0c9953840b8ba2edbf334a7c800876db1dc8eb48a3a52a1c4421681379
       - type: script
         dest-filename: bitwarden.sh
         commands:
