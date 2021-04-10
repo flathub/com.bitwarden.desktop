@@ -27,6 +27,11 @@ modules:
           - x86_64
         url: https://github.com/bitwarden/desktop/releases/download/v1.25.1/Bitwarden-1.25.1-amd64.deb
         sha256: bf8d5f0c9953840b8ba2edbf334a7c800876db1dc8eb48a3a52a1c4421681379
+        x-checker-data:
+          type: json
+          url: https://api.github.com/repos/bitwarden/desktop/releases/latest
+          version-query: .tag_name | sub("^v", "")
+          url-query: .assets[] | select(.name=="Bitwarden-\($version)-amd64.deb") | .browser_download_url
       - type: script
         dest-filename: bitwarden.sh
         commands:
