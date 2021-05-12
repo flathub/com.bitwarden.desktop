@@ -52,6 +52,7 @@
   <developer_name>8bit Solutions LLC</developer_name>
   <update_contact>hello@bitwarden.com</update_contact>
   <releases>
+    <release version="1.26.1" date="2021-05-12"/>
     <release version="1.26.0" date="2021-05-12"/>
     <release version="1.25.1" date="2021-03-18"/>
   </releases>
