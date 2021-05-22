@@ -49,6 +49,8 @@
     </screenshot>
   </screenshots>
   <url type="homepage">https://www.bitwarden.com/</url>
+  <url type="bugtracker">https://github.com/bitwarden/desktop/issues/</url>
+  <url type="help">https://bitwarden.com/help/</url>
   <developer_name>8bit Solutions LLC</developer_name>
   <update_contact>hello@bitwarden.com</update_contact>
   <releases>
