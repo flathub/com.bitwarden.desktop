@@ -18,8 +18,6 @@ finish-args:
 rename-desktop-file: bitwarden.desktop
 rename-icon: bitwarden
 modules:
-  - shared-modules/libsecret/libsecret.json
-
   - name: Bitwarden
     sources:
       - type: file
