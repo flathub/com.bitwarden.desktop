@@ -8,8 +8,9 @@ command: bitwarden
 separate-locales: false
 finish-args:
   - --share=ipc
-  - --socket=x11
   - --share=network
+  - --socket=wayland
+  - --socket=x11
   - --device=dri
   - --env=XDG_CURRENT_DESKTOP=Unity
   - --talk-name=org.kde.StatusNotifierWatcher
