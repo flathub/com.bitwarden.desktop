@@ -10,7 +10,7 @@ finish-args:
   - --share=ipc
   - --share=network
   - --socket=wayland
-  - --socket=x11
+  - --socket=fallback-x11
   - --device=dri
   - --env=XDG_CURRENT_DESKTOP=Unity
   - --talk-name=org.kde.StatusNotifierWatcher
@@ -22,7 +22,7 @@ rename-icon: bitwarden
 modules:
   - shared-modules/libsecret/libsecret.json
 
-  - name: Bitwarden
+  - name: bitwarden
     sources:
       - type: file
         only-arches:
@@ -39,7 +39,10 @@ modules:
         dest-filename: bitwarden.sh
         commands:
           - export TMPDIR="$XDG_RUNTIME_DIR/app/$FLATPAK_ID"
-          - exec zypak-wrapper /app/Bitwarden/bitwarden "$@"
+          - if [ -n "$WAYLAND_DISPLAY" ]; then
+          - EXTRA_WAYLAND_ARGS="--enable-features=UseOzonePlatform -ozone-platform=wayland"
+          - fi
+          - zypak-wrapper.sh /app/Bitwarden/bitwarden "$EXTRA_WAYLAND_ARGS" "$@"
       - type: file
         path: com.bitwarden.desktop.appdata.xml
     buildsystem: simple
