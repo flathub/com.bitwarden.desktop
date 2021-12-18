@@ -42,7 +42,7 @@ modules:
           - if [ -n "$WAYLAND_DISPLAY" ]; then
           - EXTRA_WAYLAND_ARGS="--enable-features=UseOzonePlatform -ozone-platform=wayland"
           - fi
-          - zypak-wrapper.sh /app/Bitwarden/bitwarden "$EXTRA_WAYLAND_ARGS" "$@"
+          - zypak-wrapper.sh /app/Bitwarden/bitwarden $EXTRA_WAYLAND_ARGS "$@"
       - type: file
         path: com.bitwarden.desktop.appdata.xml
     buildsystem: simple
