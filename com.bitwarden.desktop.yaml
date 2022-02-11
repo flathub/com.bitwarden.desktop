@@ -28,8 +28,8 @@ modules:
       - type: file
         only-arches:
           - x86_64
-        url: https://github.com/bitwarden/desktop/releases/download/v1.31.0/Bitwarden-1.31.0-amd64.deb
-        sha256: 694b4ab8e0de547a7e4c0e711d8ec2762dfa689a3f4ca914f71fe9e26571291d
+        url: https://github.com/bitwarden/desktop/releases/download/v1.31.1/Bitwarden-1.31.1-amd64.deb
+        sha256: 9578bae7696a7658e16c1c20cea688d525b751c7f562f350f417c5502ca2b9b7
         x-checker-data:
           type: json
           url: https://api.github.com/repos/bitwarden/desktop/releases/latest
