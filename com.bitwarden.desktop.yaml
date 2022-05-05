@@ -23,7 +23,19 @@ rename-icon: bitwarden
 modules:
   - shared-modules/libsecret/libsecret.json
 
-  - name: Bitwarden
+  - name: bitwarden-desktop
+    buildsystem: simple
+    build-commands:
+      - ar -x Bitwarden*.deb
+      - rm -f Bitwarden*.deb
+      - tar -xf data.tar.xz
+      - rm -f control.tar.gz data.tar.xz debian-binary
+      - cp -r opt/* usr/* $FLATPAK_DEST
+      - rm -rf opt usr
+      - install bitwarden.sh $FLATPAK_DEST/bin/bitwarden
+      - install -D -m 644 -t $FLATPAK_DEST/share/metainfo $FLATPAK_ID.appdata.xml
+      - desktop-file-edit --set-key=Exec --set-value="bitwarden %U" $FLATPAK_DEST/share/applications/bitwarden.desktop
+      - rm -rf "${FLATPAK_DEST}/share/icons/hicolor/1024x1024/"
     sources:
       - type: file
         only-arches:
@@ -43,15 +55,21 @@ modules:
           - exec zypak-wrapper /app/Bitwarden/bitwarden "$@"
       - type: file
         path: com.bitwarden.desktop.appdata.xml
+
+  - name: bitwarden-cli
     buildsystem: simple
     build-commands:
-      - ar -x Bitwarden*.deb
-      - rm -f Bitwarden*.deb
-      - tar -xf data.tar.xz
-      - rm -f control.tar.gz data.tar.xz debian-binary
-      - cp -r opt/* usr/* $FLATPAK_DEST
-      - rm -rf opt usr
-      - install bitwarden.sh $FLATPAK_DEST/bin/bitwarden
-      - install -D -m 644 -t $FLATPAK_DEST/share/metainfo $FLATPAK_ID.appdata.xml
-      - desktop-file-edit --set-key=Exec --set-value="bitwarden %U" $FLATPAK_DEST/share/applications/bitwarden.desktop
-      - rm -rf "${FLATPAK_DEST}/share/icons/hicolor/1024x1024/"
+      - unzip bw-linux*.zip
+      - install -D -m 755 -t "${FLATPAK_DEST}/bin" bw
+    sources:
+      - type: file
+        only-arches:
+          - x86_64
+        url: https://github.com/bitwarden/cli/releases/download/v1.22.1/bw-linux-1.22.1.zip
+        sha256: 0a6cc87a163463c25eed5d5bdf1ef6b77d2a67db911b2279dae5c674b116aa0e
+        x-checker-data:
+          type: json
+          url: https://api.github.com/repos/bitwarden/cli/releases/latest
+          version-query: .tag_name | sub("^v"; "")
+          url-query: .assets[] | select(.name=="bw-linux-\($version).zip")
+            | .browser_download_url
