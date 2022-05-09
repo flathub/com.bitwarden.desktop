@@ -40,8 +40,8 @@ modules:
       - type: file
         only-arches:
           - x86_64
-        url: https://github.com/bitwarden/desktop/releases/download/v1.33.0/Bitwarden-1.33.0-amd64.deb
-        sha256: 6de9c495227090eee5ed2c5e3f4068242257f8afc1ffcd234f5e3ff75e0b18b9
+        url: https://github.com/bitwarden/desktop/releases/download/v1.32.1/Bitwarden-1.32.1-amd64.deb
+        sha256: 1b593c91fd34110547ff3d9fa07e0d1c2c3cdbf7938bb04c31f915b57e887d0a
         x-checker-data:
           type: json
           url: https://api.github.com/repos/bitwarden/desktop/releases/latest
@@ -71,5 +71,4 @@ modules:
           type: json
           url: https://api.github.com/repos/bitwarden/cli/releases/latest
           version-query: .tag_name | sub("^v"; "")
-          url-query: .assets[] | select(.name=="bw-linux-\($version).zip")
-            | .browser_download_url
+          url-query: .assets[] | select(.name=="bw-linux-\($version).zip") | .browser_download_url
