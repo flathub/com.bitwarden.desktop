@@ -40,8 +40,8 @@ modules:
       - type: file
         only-arches:
           - x86_64
-        url: https://github.com/bitwarden/desktop/releases/download/v1.33.0/Bitwarden-1.33.0-amd64.deb
-        sha256: 6de9c495227090eee5ed2c5e3f4068242257f8afc1ffcd234f5e3ff75e0b18b9
+        url: https://github.com/bitwarden/desktop/releases/download/v2022.5.0/Bitwarden-2022.5.0-amd64.deb
+        sha256: b2d9a03bbb2a007e8d8eb4cb6c02e42ac3e7bd707a7be8066544c0b613f27496
         x-checker-data:
           type: json
           url: https://api.github.com/repos/bitwarden/desktop/releases/latest
