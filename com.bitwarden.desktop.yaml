@@ -40,7 +40,7 @@ modules:
       - type: file
         only-arches:
           - x86_64
-        url: https://github.com/bitwarden/desktop/releases/download/v2022.5.0/Bitwarden-2022.5.0-amd64.deb
+        url: https://github.com/bitwarden/clients/releases/download/desktop-v2022.5.0/Bitwarden-2022.5.0-amd64.deb
         sha256: b2d9a03bbb2a007e8d8eb4cb6c02e42ac3e7bd707a7be8066544c0b613f27496
         x-checker-data:
           type: anitya
