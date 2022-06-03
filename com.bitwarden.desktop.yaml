@@ -43,11 +43,9 @@ modules:
         url: https://github.com/bitwarden/desktop/releases/download/v2022.5.0/Bitwarden-2022.5.0-amd64.deb
         sha256: b2d9a03bbb2a007e8d8eb4cb6c02e42ac3e7bd707a7be8066544c0b613f27496
         x-checker-data:
-          type: json
-          url: https://api.github.com/repos/bitwarden/desktop/releases/latest
-          version-query: .tag_name | sub("^v"; "")
-          url-query: .assets[] | select(.name=="Bitwarden-\($version)-amd64.deb")
-            | .browser_download_url
+          type: anitya
+          project-id: 179174
+          url-template: https://github.com/bitwarden/clients/releases/download/desktop-v$version/Bitwarden-$version-amd64.deb
       - type: script
         dest-filename: bitwarden.sh
         commands:
