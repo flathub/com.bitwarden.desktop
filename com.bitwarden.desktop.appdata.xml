@@ -58,7 +58,13 @@
   <developer_name>8bit Solutions LLC</developer_name>
   <update_contact>hello@bitwarden.com</update_contact>
   <releases>
-    <release version="2022.5.0" date="2022-06-03"/>
+    <release version="2022.8.1" date="2022-08-11"/>
+    <release version="2022.8.0" date="2022-08-08"/>
+    <release version="2022.6.2" date="2022-07-12"/>
+    <release version="2022.6.1" date="2022-07-07"/>
+    <release version="2022.6.0" date="2022-07-01"/>
+    <release version="2022.5.1" date="2022-06-08"/>
+    <release version="2022.5.0" date="2022-06-02"/>
     <release version="1.33.0" date="2022-04-25"/>
     <release version="1.32.1" date="2022-03-22"/>
     <release version="1.32.0" date="2022-03-16"/>
