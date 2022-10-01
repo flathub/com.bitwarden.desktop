@@ -46,6 +46,7 @@ modules:
           type: anitya
           project-id: 179174
           url-template: https://github.com/bitwarden/clients/releases/download/desktop-v$version/Bitwarden-$version-amd64.deb
+          is-main-source: true
       - type: script
         dest-filename: bitwarden.sh
         commands:
