@@ -66,7 +66,6 @@ modules:
         url: https://github.com/bitwarden/cli/releases/download/v1.22.1/bw-linux-1.22.1.zip
         sha256: 0a6cc87a163463c25eed5d5bdf1ef6b77d2a67db911b2279dae5c674b116aa0e
         x-checker-data:
-          type: json
-          url: https://api.github.com/repos/bitwarden/cli/releases/latest
-          version-query: .tag_name | sub("^v"; "")
-          url-query: .assets[] | select(.name=="bw-linux-\($version).zip") | .browser_download_url
+          type: anitya
+          project-id: 229011
+          url-template: https://github.com/bitwarden/clients/releases/download/cli-v$version/bw-linux-$version.zip
