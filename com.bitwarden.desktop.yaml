@@ -64,8 +64,8 @@ modules:
       - type: file
         only-arches:
           - x86_64
-        url: https://github.com/bitwarden/cli/releases/download/v1.22.1/bw-linux-1.22.1.zip
-        sha256: 0a6cc87a163463c25eed5d5bdf1ef6b77d2a67db911b2279dae5c674b116aa0e
+        url: https://github.com/bitwarden/clients/releases/download/cli-v2022.9.0/bw-linux-2022.9.0.zip
+        sha256: 9a6687dd33aec02239619b23bcede31195028bb01e022b82505031da638d5a29
         x-checker-data:
           type: anitya
           project-id: 229011
