@@ -40,8 +40,8 @@ modules:
       - type: file
         only-arches:
           - x86_64
-        url: https://github.com/bitwarden/clients/releases/download/desktop-v2022.9.1/Bitwarden-2022.9.1-amd64.deb
-        sha256: 29abafcf12f34d52aeda475fa84ae39b940b7d3235b9a60b05251c3430ac253d
+        url: https://github.com/bitwarden/clients/releases/download/desktop-v2022.10.0/Bitwarden-2022.10.0-amd64.deb
+        sha256: 2890516b1ac786858432bb78b5583a7a5557ed9d805e2f660f54490f36d185d2
         x-checker-data:
           type: anitya
           project-id: 179174
@@ -64,8 +64,8 @@ modules:
       - type: file
         only-arches:
           - x86_64
-        url: https://github.com/bitwarden/clients/releases/download/cli-v2022.9.0/bw-linux-2022.9.0.zip
-        sha256: 9a6687dd33aec02239619b23bcede31195028bb01e022b82505031da638d5a29
+        url: https://github.com/bitwarden/clients/releases/download/cli-v2022.10.0/bw-linux-2022.10.0.zip
+        sha256: 3a47014de6842264b7d0cdd134e54c7b7e8461e7d353814a8b36f1f4ffc9d997
         x-checker-data:
           type: anitya
           project-id: 229011
