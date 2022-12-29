@@ -63,7 +63,7 @@ modules:
         commands:
           - export TMPDIR="${XDG_RUNTIME_DIR}/app/${FLATPAK_ID}"
           - if [ "${XDG_SESSION_TYPE}" == "wayland" ]; then
-          - zypak-wrapper /app/Bitwarden/bitwarden --enable-features=UseOzonePlatform --ozone-platform=wayland "$@"
+          - zypak-wrapper /app/Bitwarden/bitwarden --ozone-platform-hint=auto --enable-features=WaylandWindowDecorations "$@"
           - else
           - zypak-wrapper /app/Bitwarden/bitwarden "$@"
           - fi
