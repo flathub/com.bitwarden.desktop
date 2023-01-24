@@ -13,8 +13,7 @@ sdk-extensions:
 finish-args:
   - --share=ipc
   - --share=network
-  - --socket=wayland
-  - --socket=fallback-x11
+  - --socket=x11
   - --device=dri
   - --env=XDG_CURRENT_DESKTOP=Unity
   - --talk-name=org.kde.StatusNotifierWatcher
@@ -74,12 +73,12 @@ modules:
       # Flatpak doesn't support git sources with protocols other than http(s): https://github.com/flathub/flatpak-builder-lint/blob/ed33aef30c1590b6ef579ef40b07f81802e10ed3/flatpak_builder_lint/checks/modules.py#L43
       - sed -i -e "s,git+ssh://git@github.com/duosecurity/duo_web_sdk.git,git+https://github.com/duosecurity/duo_web_sdk.git,g" package-lock.json
 
+      # Flatpak doesn't support building against musl yet
+      - sed -i -e "s,desktop_native.linux-x64-musl,desktop_native.linux-x64-gnu,g" -e "s,@bitwarden/desktop-native-linux-x64-musl,@bitwarden/desktop-native-linux-x64-gnu,g" apps/desktop/desktop_native/index.js
+
       - npm ci --offline
 
-      - |
-        source /usr/lib/sdk/rust-stable/enable.sh
-        rustup target add x86_64-unknown-linux-musl
-        npm run --prefix=apps/desktop/desktop_native build:cross-platform
+      - source /usr/lib/sdk/rust-stable/enable.sh; npm run --prefix=apps/desktop/desktop_native build
 
       - npm run --prefix=apps/desktop dist:dir --${npm_config_arch}
 
@@ -87,17 +86,16 @@ modules:
       - rm apps/desktop/dist/linux-*unpacked/chrome-sandbox
 
       # Copy the resulting, unpacked directory to /app.
-      - "cp -r apps/desktop/dist/linux-*unpacked /app/bitwarden-desktop"
+      - "cp -r apps/desktop/dist/linux-*unpacked ${FLATPAK_DEST}/bitwarden-desktop"
 
       - |
         for size in 16 32 64 128 256 512; do
-          install -Dm644 "apps/desktop/resources/icon.iconset/icon_${size}x${size}.png" "/app/share/icons/hicolor/${size}x${size}/apps/${FLATPAK_ID}.png"
+          install -Dm644 "apps/desktop/resources/icon.iconset/icon_${size}x${size}.png" "${FLATPAK_DEST}/share/icons/hicolor/${size}x${size}/apps/${FLATPAK_ID}.png"
         done
 
-      - install -Dm644 com.bitwarden.desktop.metainfo.xml
-        /app/share/metainfo/$FLATPAK_ID.metainfo.xml
+      - install -Dm644 com.bitwarden.desktop.metainfo.xml ${FLATPAK_DEST}/share/metainfo/$FLATPAK_ID.metainfo.xml
 
-      - "install -Dm 755 bitwarden.sh /app/bin/bitwarden"
+      - "install -Dm 755 bitwarden.sh ${FLATPAK_DEST}/bin/bitwarden"
     sources:
       - type: git
         url: https://github.com/bitwarden/clients.git
@@ -106,7 +104,6 @@ modules:
           type: anitya
           project-id: 179174
           tag-template: desktop-v$version
-          is-main-source: true
       - type: script
         dest-filename: bitwarden.sh
         commands:

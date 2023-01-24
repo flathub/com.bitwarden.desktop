@@ -1,6 +1,6 @@
 [Desktop Entry]
 Name=Bitwarden
-Exec=start-bitwarden %u
+Exec=bitwarden %u
 Terminal=false
 Type=Application
 Icon=com.bitwarden.desktop
