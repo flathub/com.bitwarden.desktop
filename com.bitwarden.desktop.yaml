@@ -97,10 +97,10 @@ modules:
       - npm run --prefix=apps/desktop dist:dir --${npm_config_arch}
 
       # Remove unneeded files
-      - rm dist/linux-*unpacked/chrome-sandbox
+      - rm apps/desktop/dist/linux-*unpacked/chrome-sandbox
 
       # Copy the resulting, unpacked directory to /app.
-      - "cp -r dist/linux-*unpacked /app/bitwarden"
+      - "cp -r apps/desktop/dist/linux-*unpacked /app/bitwarden-desktop"
 
       # Retire this at some point when an SVG is available
       - for size in 16 32 64 128 256 512; do [[ -e
@@ -125,7 +125,7 @@ modules:
         dest-filename: bitwarden.sh
         commands:
           - export TMPDIR="$XDG_RUNTIME_DIR/app/$FLATPAK_ID"
-          - exec zypak-wrapper /app/Bitwarden/bitwarden "$@"
+          - exec zypak-wrapper /app/bitwarden-desktop/bitwarden "$@"
       - type: file
         path: com.bitwarden.desktop.metainfo.xml
 
