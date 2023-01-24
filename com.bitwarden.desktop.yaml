@@ -76,16 +76,14 @@ modules:
       - sed -i -e "s,desktop_native.linux-x64-musl,desktop_native.linux-x64-gnu,g" -e "s,@bitwarden/desktop-native-linux-x64-musl,@bitwarden/desktop-native-linux-x64-gnu,g" apps/desktop/desktop_native/index.js
 
       - npm ci --offline
-
       - source /usr/lib/sdk/rust-stable/enable.sh; npm run --prefix=apps/desktop/desktop_native build
-
       - npm run --prefix=apps/desktop dist:dir --${npm_config_arch}
 
       # Remove unneeded files
       - rm apps/desktop/dist/linux-*unpacked/chrome-sandbox
 
       # Copy the resulting, unpacked directory to /app.
-      - "cp -r apps/desktop/dist/linux-*unpacked ${FLATPAK_DEST}/bitwarden-desktop"
+      - cp -r apps/desktop/dist/linux-*unpacked ${FLATPAK_DEST}/bitwarden-desktop
 
       - install -Dm644 "apps/desktop/resources/icon.iconset/icon_512x512.png" "${FLATPAK_DEST}/share/icons/hicolor/512x512/apps/${FLATPAK_ID}.png"
       - install -Dm644 com.bitwarden.desktop.metainfo.xml ${FLATPAK_DEST}/share/metainfo/${FLATPAK_ID}.metainfo.xml
