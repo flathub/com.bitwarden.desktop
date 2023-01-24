@@ -11,11 +11,10 @@ sdk-extensions:
   - org.freedesktop.Sdk.Extension.node16
   - org.freedesktop.Sdk.Extension.rust-stable
 finish-args:
-  - --device=dri
   - --share=ipc
   - --share=network
   - --socket=wayland
-  - --socket=x11
+  - --socket=fallback-x11
   - --device=dri
   - --env=XDG_CURRENT_DESKTOP=Unity
   - --talk-name=org.kde.StatusNotifierWatcher
@@ -113,7 +112,7 @@ modules:
         x-checker-data:
           type: anitya
           project-id: 179174
-          url-template: https://github.com/bitwarden/clients/releases/download/desktop-v$version/Bitwarden-$version-amd64.deb
+          tag-template: desktop-v$version
           is-main-source: true
       - type: script
         dest-filename: bitwarden.sh
