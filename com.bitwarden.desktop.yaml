@@ -88,14 +88,10 @@ modules:
       # Copy the resulting, unpacked directory to /app.
       - "cp -r apps/desktop/dist/linux-*unpacked ${FLATPAK_DEST}/bitwarden-desktop"
 
-      - |
-        for size in 16 32 64 128 256 512; do
-          install -Dm644 "apps/desktop/resources/icon.iconset/icon_${size}x${size}.png" "${FLATPAK_DEST}/share/icons/hicolor/${size}x${size}/apps/${FLATPAK_ID}.png"
-        done
-
-      - install -Dm644 com.bitwarden.desktop.metainfo.xml ${FLATPAK_DEST}/share/metainfo/$FLATPAK_ID.metainfo.xml
-
-      - "install -Dm 755 bitwarden.sh ${FLATPAK_DEST}/bin/bitwarden"
+      - install -Dm644 "apps/desktop/resources/icon.iconset/icon_512x512.png" "${FLATPAK_DEST}/share/icons/hicolor/512x512/apps/${FLATPAK_ID}.png"
+      - install -Dm644 com.bitwarden.desktop.metainfo.xml ${FLATPAK_DEST}/share/metainfo/${FLATPAK_ID}.metainfo.xml
+      - install -Dm644 com.bitwarden.desktop.desktop ${FLATPAK_DEST}/share/applications/${FLATPAK_ID}.desktop
+      - install -Dm 755 bitwarden.sh ${FLATPAK_DEST}/bin/bitwarden
     sources:
       - type: git
         url: https://github.com/bitwarden/clients.git
@@ -111,6 +107,8 @@ modules:
           - exec zypak-wrapper /app/bitwarden-desktop/bitwarden "$@"
       - type: file
         path: com.bitwarden.desktop.metainfo.xml
+      - type: file
+        path: com.bitwarden.desktop.desktop
 
       # flatpak-node-generator --electron-node-headers npm package-lock.json -o node-sources.json
       - node-sources.json
