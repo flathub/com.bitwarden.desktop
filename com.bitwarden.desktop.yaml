@@ -1,9 +1,9 @@
 app-id: com.bitwarden.desktop
 runtime: org.freedesktop.Platform
-runtime-version: "22.08"
+runtime-version: '22.08'
 sdk: org.freedesktop.Sdk
 base: org.electronjs.Electron2.BaseApp
-base-version: "22.08"
+base-version: '22.08'
 command: bitwarden
 sdk-extensions:
   # https://github.com/bitwarden/clients/blob/e2c25c6aad47d1e086ee8bb749e413cd93f89ca8/.nvmrc
