@@ -1,81 +1,50 @@
-# Modifed from https://github.com/flathub/net.veloren.veloren/raw/master/net.veloren.veloren.yaml
-
 name: Auto update
-
-env:
-  BUILDER_TOOLS_URL: https://github.com/proletarius101/flatpak-builder-tools.git
-  BUILDER_TOOLS_BRANCH: add-support-for-git-ssh
-  YQ_VERSION: "v4.6.1"
-  YQ_BINARY: yq_linux_amd64
 
 on:
   push:
 
 jobs:
   update:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
-      - name: Install dependencies
-        run: |
-          set -e
-          sudo apt install python3-toml python3-aiohttp python3-defusedxml
-
-      - uses: actions/checkout@v2
-
-      - name: Download flatpak-builder-tools
-        run: |
-          git clone -b ${BUILDER_TOOLS_BRANCH} \
-                       ${BUILDER_TOOLS_URL} \
-                       builder-tools
-
-      # https://github.com/flatpak/flatpak-builder-tools/issues/192
-      - name: Simply assert the support for lockfileVersion 2
-        run: |
-          sed -i -e "s/assert data\['lockfileVersion'\] == 1,/assert data['lockfileVersion'] == 1 or data['lockfileVersion'] == 2,/" builder-tools/node/flatpak-node-generator.py
-
-      # Rather than track the tip of a branch
-      - name: Get the current tag
-        run: |
-          set -e
-
-          mkdir ~/bin
-          wget https://github.com/mikefarah/yq/releases/download/${YQ_VERSION}/${YQ_BINARY} -O ~/bin/yq && \
-          chmod +x ~/bin/yq
-
-          TAG=`~/bin/yq e '.modules.[] | select(.name == "bitwarden") | .sources.[] | select(.url == "https://github.com/bitwarden/desktop.git") | .tag' com.bitwarden.desktop.yaml`
-
-          echo "TAG=$TAG" >> $GITHUB_ENV
-
-      # https://github.com/bitwarden/desktop/issues/719
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
         with:
-          node-version: "12"
+          python-version: "3.10"
 
-      - uses: actions/checkout@v2
-        with:
-          # Repository name with owner. For example, actions/checkout
-          # Default: ${{ github.repository }}
-          repository: bitwarden/desktop
-          path: https_github.com_bitwarden_desktop.git
-          ref: ${{ env.TAG }}
-
-      - name: Move upstream repo to ~/.cache/flatpak-updater
+      - name: Setup environment variables
         run: |
-          mkdir -p ~/.cache/flatpak-updater
-          mv https_github.com_bitwarden_desktop.git ~/.cache/flatpak-updater
+          echo "FLATPAK_BUILDER_TOOLS_DIR=/tmp/flatpak-builder-tools" >> $GITHUB_ENV
+          echo "BITWARDEN_DESKTOP_VERSION="$(yq '.modules[1].sources[0].tag' 'com.bitwarden.desktop.yaml')"" >> $GITHUB_ENV
 
-      - name: Generate lockfile for src/
+      - name: Setup flatpak-builder-tools
         run: |
-          cd ~/.cache/flatpak-updater/https_github.com_bitwarden_desktop.git
-          npm i --packge-lock-only --prefix src
-          cp src/package-lock.json $GITHUB_WORKSPACE/package-lock.src.json
-          cd $GITHUB_WORKSPACE
-          git add package-lock.src.json
+          git clone --depth=1 https://github.com/flatpak/flatpak-builder-tools ${FLATPAK_BUILDER_TOOLS_DIR}
+          pip install --user pipx && pipx install ${FLATPAK_BUILDER_TOOLS_DIR}/node
+          pip install --user toml aiohttp
 
-      - name: Run update
+      - name: Update Node.js generated sources
+        run: |
+          wget "https://github.com/bitwarden/clients/raw/${BITWARDEN_DESKTOP_VERSION}/package-lock.json" -O package-lock.json
+          flatpak-node-generator --electron-node-headers npm package-lock.json -o node-sources.json
+          rm package-lock.json
+
+      - name: Update Rust generated sources
+        run: |
+          wget "https://github.com/bitwarden/clients/raw/${BITWARDEN_DESKTOP_VERSION}/apps/desktop/desktop_native/Cargo.lock" -O Cargo.lock
+          python3 ${FLATPAK_BUILDER_TOOLS_DIR}/cargo/flatpak-cargo-generator.py Cargo.lock -o cargo-sources.json
+          rm Cargo.lock
+
+      - name: Commit updates
         run: |
           set -e
+
+          [[ ! $(git status --porcelain) ]] && exit 0
+
           git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
           git config user.name "Workflow trigger"
-          python3 ./update.py bitwarden-git.json --ref ${{ env.TAG }} -g builder-tools/node/flatpak-node-generator.py --generator-arg=--electron-node-headers --generator-arg=--xdg-layout --generator-arg=-r --generator-arg=npm --generator-arg=package-lock.json
+
+          git add node-sources.json cargo-sources.json
+          git commit -m 'Update generated sources'
+
           git push https://${GITHUB_ACTOR}:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}
