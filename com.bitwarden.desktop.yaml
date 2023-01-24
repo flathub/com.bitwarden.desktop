@@ -71,24 +71,6 @@ modules:
             npm_config_arch: arm64
             npm_config_target_arch: arm64
     build-commands:
-      # # Remove webfonts job to fetch opensans
-      # # https://github.com/flathub/flathub/pull/547#issuecomment-416207800
-      # - sed -i -e 's/gulp prebuild:renderer && //' package.json
-      # - sed -i '/@import "..\/css\/webfonts.css";/d' src/scss/styles.scss
-      # - sed -i -e 's/\$font-family-sans-serif:.*$/$font-family-sans-serif:\
-      #   sans-serif;/' src/scss/variables.scss
-      # - sed -i -e 's/\$font-family-monospace:.*$/$font-family-monospace:\
-      #   monospace;/' src/scss/variables.scss
-      #   # No need to rebuild native code here because electron-builder will take care of it
-      # - sed -i '/"postinstall"/d' package.json
-
-      # # Sometimes package.json and the lockfile are not in sync
-      # # In that case, do `npm install --prefix jslib` before generating sources
-      # - npm install --prefix jslib
-      # # Although the upstream includes all deps in the root, it makes more sense and is less
-      # # error-prone to install deps in src, in case they're not in-sync
-      # - npm install --prefix src
-
       # Flatpak doesn't support git sources with protocols other than http(s): https://github.com/flathub/flatpak-builder-lint/blob/ed33aef30c1590b6ef579ef40b07f81802e10ed3/flatpak_builder_lint/checks/modules.py#L43
       - sed -i -e "s,git+ssh://git@github.com/duosecurity/duo_web_sdk.git,git+https://github.com/duosecurity/duo_web_sdk.git,g" package-lock.json
 
@@ -102,11 +84,10 @@ modules:
       # Copy the resulting, unpacked directory to /app.
       - "cp -r apps/desktop/dist/linux-*unpacked /app/bitwarden-desktop"
 
-      # Retire this at some point when an SVG is available
-      - for size in 16 32 64 128 256 512; do [[ -e
-        "apps/desktop/resources/icon.iconset/${size}x${size}.png" ]] && install -Dm644
-        "apps/desktop/resources/icon.iconset/${size}x${size}.png"
-        "/app/share/icons/hicolor/${size}x${size}/apps/${FLATPAK_ID}.png"; done
+      - |
+        for size in 16 32 64 128 256 512; do
+          install -Dm644 "apps/desktop/resources/icon.iconset/icon_${size}x${size}.png" "/app/share/icons/hicolor/${size}x${size}/apps/${FLATPAK_ID}.png"
+        done
 
       - install -Dm644 com.bitwarden.desktop.metainfo.xml
         /app/share/metainfo/$FLATPAK_ID.metainfo.xml
