@@ -4,7 +4,6 @@ runtime-version: "22.08"
 sdk: org.freedesktop.Sdk
 base: org.electronjs.Electron2.BaseApp
 base-version: "22.08"
-separate-locales: false
 command: bitwarden
 sdk-extensions:
   # https://github.com/bitwarden/clients/blob/e2c25c6aad47d1e086ee8bb749e413cd93f89ca8/.nvmrc
@@ -92,6 +91,16 @@ modules:
       - install -Dm644 com.bitwarden.desktop.metainfo.xml ${FLATPAK_DEST}/share/metainfo/${FLATPAK_ID}.metainfo.xml
       - install -Dm644 com.bitwarden.desktop.desktop ${FLATPAK_DEST}/share/applications/${FLATPAK_ID}.desktop
       - install -Dm 755 bitwarden.sh ${FLATPAK_DEST}/bin/bitwarden
+
+      # To allow separate locales
+      # https://searchfox.org/mozilla-central/rev/8a4f55bc09ffc5c25dcb4586c51ae4a9fee77b4c/taskcluster/docker/firefox-flatpak/runme.sh#131-133
+      - |
+        for lang in ${FLATPAK_DEST}/bitwarden-desktop/locales/*.pak
+        do
+          locale="$(basename -s .pak $lang)"
+          install -Dm644 -t "${FLATPAK_DEST}/share/runtime/locale/${locale%%-*}/" "$lang"
+          ln -sf "${FLATPAK_DEST}/share/runtime/locale/${locale%%-*}/$(basename $lang)" "${FLATPAK_DEST}/bitwarden-desktop/locales/$(basename $lang)"
+        done
     sources:
       - type: git
         url: https://github.com/bitwarden/clients.git
