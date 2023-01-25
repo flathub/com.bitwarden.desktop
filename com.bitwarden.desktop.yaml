@@ -40,8 +40,6 @@ modules:
         CXX: ccache g++
         ELECTRON_SKIP_BINARY_DOWNLOAD: "true"
 
-        # It does not work to dereference the variable here :-/
-        # CARGO_HOME: $FLATPAK_BUILDER_BUILDDIR/cargo
         CARGO_HOME: /run/build/bitwarden-desktop/cargo
 
         # The intention is to have a release build with debugging symbols.
@@ -124,16 +122,80 @@ modules:
 
   - name: bitwarden-cli
     buildsystem: simple
+    build-options:
+      # Add the node bin directory.
+      append-path: "/usr/lib/sdk/node16/bin:/run/build/bitwarden-cli/flatpak-node/chromedrive:/usr/lib/sdk/rust-stable/bin"
+      env:
+        # Don't add ELECTRON_CACHE
+        XDG_CACHE_HOME: /run/build/bitwarden-cli/flatpak-node/cache
+        npm_config_nodedir: /usr/lib/sdk/node16
+        npm_config_offline: "true"
+        npm_config_no_save: "true"
+        npm_config_cache: /run/build/bitwarden-cli/flatpak-node/npm-cache
+        npm_config_loglevel: "verbose"
+        # https://stackoverflow.com/questions/25146976/can-i-get-npm-gyp-to-use-ccache
+        CXX: ccache g++
+        ELECTRON_SKIP_BINARY_DOWNLOAD: "true"
+
+        PKG_CACHE_PATH: /run/build/bitwarden-cli/pkg-cache
+        PKG_IGNORE_TAG: "1"
+
+      arch:
+        # https://github.com/sass/node-sass/issues/3033#issuecomment-763180778
+        # The architecture of Electron, see https://electronjs.org/docs/tutorial/support#supported-platforms
+        # for supported architectures.
+        i386:
+          env:
+            npm_config_arch: ia32
+            npm_config_target_arch: ia32
+        x86_64:
+          env:
+            npm_config_arch: x64
+            npm_config_target_arch: x64
+        arm:
+          env:
+            npm_config_arch: armv7l
+            npm_config_target_arch: armv7l
+        aarch64:
+          env:
+            npm_config_arch: arm64
+            npm_config_target_arch: arm64
     build-commands:
-      - unzip bw-linux*.zip
-      - install -D -m 755 -t "${FLATPAK_DEST}/bin" bw
+      # Flatpak doesn't support git sources with protocols other than http(s): https://github.com/flathub/flatpak-builder-lint/blob/ed33aef30c1590b6ef579ef40b07f81802e10ed3/flatpak_builder_lint/checks/modules.py#L43
+      - sed -i -e "s,git+ssh://git@github.com/duosecurity/duo_web_sdk.git,git+https://github.com/duosecurity/duo_web_sdk.git,g" package-lock.json
+
+      - npm ci --offline
+
+      # https://github.com/bitwarden/clients/blob/d40a891f719371c20a46a00e4ac04bf24801e56d/apps/cli/package.json#LL34C17-L34C55
+      - npm run --prefix=apps/cli --offline build:prod --${npm_config_arch}
+      - npm --prefix=apps/cli run clean
+      - npx --prefix=apps/cli pkg apps/cli --targets host --output apps/cli/dist/linux/bw
+
+      - install -Dm 755 apps/cli/dist/linux/bw ${FLATPAK_DEST}/bin/bw
     sources:
-      - type: file
-        only-arches:
-          - x86_64
-        url: https://github.com/bitwarden/clients/releases/download/cli-v2023.1.0/bw-linux-2023.1.0.zip
-        sha256: 523684cc0b4f048c923525c2e23047b85ddb72341ea25c2fb3b140cbd2e37e8d
+      - type: git
+        url: https://github.com/bitwarden/clients.git
+        tag: cli-v2023.1.0
         x-checker-data:
           type: anitya
           project-id: 229011
-          url-template: https://github.com/bitwarden/clients/releases/download/cli-v$version/bw-linux-$version.zip
+          tag-template: cli-v$version
+
+      # `node` binary with patches for `pkg`: https://www.npmjs.com/package/pkg#build
+      - type: file
+        only-arches: ["x86_64"]
+        url: https://github.com/vercel/pkg-fetch/releases/download/v3.4/node-v16.16.0-linux-x64
+        sha256: f1a561aadf78e438e73b043a3c5d7b9fe075d7abcaaec6f29d9e2a0ba00d3a69
+        dest: pkg-cache
+        dest-filename: fetched-v16.16.0-linux-x64
+      - type: file
+        only-arches: ["aarch64"]
+        url: https://github.com/vercel/pkg-fetch/releases/download/v3.4/node-v16.16.0-linux-arm64
+        sha256: e3913ecef725f83ccbd2181d7d33043f8b3e72466d09897c338ee328cffc3bfe
+        dest: pkg-cache
+        dest-filename: fetched-v16.16.0-linux-arm64
+
+      # flatpak-node-generator --electron-node-headers npm package-lock.json -o node-sources.json
+      - node-sources.json
+      # flatpak-cargo-generator.py Cargo.lock -o cargo-sources.json
+      - cargo-sources.json
