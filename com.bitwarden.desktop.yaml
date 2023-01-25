@@ -6,7 +6,7 @@ base: org.electronjs.Electron2.BaseApp
 base-version: '22.08'
 command: bitwarden
 sdk-extensions:
-  # https://github.com/bitwarden/clients/blob/e2c25c6aad47d1e086ee8bb749e413cd93f89ca8/.nvmrc
+  # Node.js version: https://github.com/bitwarden/clients/blob/e2c25c6aad47d1e086ee8bb749e413cd93f89ca8/.nvmrc
   - org.freedesktop.Sdk.Extension.node16
   - org.freedesktop.Sdk.Extension.rust-stable
 finish-args:
@@ -184,6 +184,8 @@ modules:
       # `node` binary with patches for `pkg`: https://www.npmjs.com/package/pkg#build
       - type: file
         only-arches: ["x86_64"]
+        # Versions are from https://github.com/bitwarden/clients/blob/d40a891f719371c20a46a00e4ac04bf24801e56d/.github/workflows/build-cli.yml#L75-L76
+        # Have to be updated manually since there are 2 versions in the URL
         url: https://github.com/vercel/pkg-fetch/releases/download/v3.4/node-v16.16.0-linux-x64
         sha256: f1a561aadf78e438e73b043a3c5d7b9fe075d7abcaaec6f29d9e2a0ba00d3a69
         dest: pkg-cache
