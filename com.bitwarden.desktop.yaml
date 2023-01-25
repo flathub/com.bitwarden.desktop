@@ -5,10 +5,13 @@ sdk: org.freedesktop.Sdk
 base: org.electronjs.Electron2.BaseApp
 base-version: '22.08'
 command: bitwarden
+sdk-extensions:
+  # Node.js version: https://github.com/bitwarden/clients/blob/e2c25c6aad47d1e086ee8bb749e413cd93f89ca8/.nvmrc
+  - org.freedesktop.Sdk.Extension.node16
+  - org.freedesktop.Sdk.Extension.rust-stable
 finish-args:
   - --share=ipc
   - --share=network
-  - --socket=wayland
   - --socket=x11
   - --device=dri
   - --env=XDG_CURRENT_DESKTOP=Unity
@@ -17,65 +20,184 @@ finish-args:
   - --talk-name=org.freedesktop.secrets
   - --talk-name=com.canonical.AppMenu.Registrar
   - --filesystem=xdg-download
-rename-desktop-file: bitwarden.desktop
-rename-icon: bitwarden
 modules:
   - shared-modules/libsecret/libsecret.json
 
   - name: bitwarden-desktop
     buildsystem: simple
+    build-options:
+      # Add the node bin directory.
+      append-path: "/usr/lib/sdk/node16/bin:/run/build/bitwarden-desktop/flatpak-node/chromedrive:/usr/lib/sdk/rust-stable/bin"
+      env:
+        # Don't add ELECTRON_CACHE
+        XDG_CACHE_HOME: /run/build/bitwarden-desktop/flatpak-node/cache
+        npm_config_nodedir: /usr/lib/sdk/node16
+        npm_config_offline: "true"
+        npm_config_no_save: "true"
+        npm_config_cache: /run/build/bitwarden-desktop/flatpak-node/npm-cache
+        npm_config_loglevel: "verbose"
+        # https://stackoverflow.com/questions/25146976/can-i-get-npm-gyp-to-use-ccache
+        CXX: ccache g++
+        ELECTRON_SKIP_BINARY_DOWNLOAD: "true"
+
+        CARGO_HOME: /run/build/bitwarden-desktop/cargo
+
+        # The intention is to have a release build with debugging symbols.
+        # The flatpak build process should separate the debug symbols.
+        RUSTFLAGS: "-g"
+
+      arch:
+        # https://github.com/sass/node-sass/issues/3033#issuecomment-763180778
+        # The architecture of Electron, see https://electronjs.org/docs/tutorial/support#supported-platforms
+        # for supported architectures.
+        i386:
+          env:
+            npm_config_arch: ia32
+            npm_config_target_arch: ia32
+        x86_64:
+          env:
+            npm_config_arch: x64
+            npm_config_target_arch: x64
+        arm:
+          env:
+            npm_config_arch: armv7l
+            npm_config_target_arch: armv7l
+        aarch64:
+          env:
+            npm_config_arch: arm64
+            npm_config_target_arch: arm64
     build-commands:
-      - ar -x Bitwarden*.deb
-      - rm -f Bitwarden*.deb
-      - tar -xf data.tar.xz
-      - rm -f control.tar.gz data.tar.xz debian-binary
-      - cp -r opt/* usr/* $FLATPAK_DEST
-      - rm -rf opt usr
-      - install bitwarden.sh $FLATPAK_DEST/bin/bitwarden
-      - install -D -m 644 -t $FLATPAK_DEST/share/metainfo $FLATPAK_ID.metainfo.xml
-      - desktop-file-edit --set-key=Exec --set-value="bitwarden %U" $FLATPAK_DEST/share/applications/bitwarden.desktop
-      - rm -rf "${FLATPAK_DEST}/share/icons/hicolor/1024x1024/"
+      # Flatpak doesn't support git sources with protocols other than http(s): https://github.com/flathub/flatpak-builder-lint/blob/ed33aef30c1590b6ef579ef40b07f81802e10ed3/flatpak_builder_lint/checks/modules.py#L43
+      - sed -i -e "s,git+ssh://git@github.com/duosecurity/duo_web_sdk.git,git+https://github.com/duosecurity/duo_web_sdk.git,g" package-lock.json
+
+      # Flatpak doesn't support building against musl yet
+      - sed -i -e "s,desktop_native.linux-x64-musl,desktop_native.linux-x64-gnu,g" -e "s,@bitwarden/desktop-native-linux-x64-musl,@bitwarden/desktop-native-linux-x64-gnu,g" apps/desktop/desktop_native/index.js
+
+      - npm ci --offline
+      - source /usr/lib/sdk/rust-stable/enable.sh; npm run --prefix=apps/desktop/desktop_native build
+      - npm run --prefix=apps/desktop dist:dir --${npm_config_arch}
+
+      # Remove unneeded files
+      - rm apps/desktop/dist/linux-*unpacked/chrome-sandbox
+
+      # Copy the resulting, unpacked directory to /app.
+      - cp -r apps/desktop/dist/linux-*unpacked ${FLATPAK_DEST}/bitwarden-desktop
+
+      - install -Dm644 "apps/desktop/resources/icon.iconset/icon_512x512.png" "${FLATPAK_DEST}/share/icons/hicolor/512x512/apps/${FLATPAK_ID}.png"
+      - install -Dm644 com.bitwarden.desktop.metainfo.xml ${FLATPAK_DEST}/share/metainfo/${FLATPAK_ID}.metainfo.xml
+      - install -Dm644 com.bitwarden.desktop.desktop ${FLATPAK_DEST}/share/applications/${FLATPAK_ID}.desktop
+      - install -Dm 755 bitwarden.sh ${FLATPAK_DEST}/bin/bitwarden
 
       # To allow separate locales
       # https://searchfox.org/mozilla-central/rev/8a4f55bc09ffc5c25dcb4586c51ae4a9fee77b4c/taskcluster/docker/firefox-flatpak/runme.sh#131-133
       - |
-        for lang in ${FLATPAK_DEST}/Bitwarden/locales/*.pak
+        for lang in ${FLATPAK_DEST}/bitwarden-desktop/locales/*.pak
         do
           locale="$(basename -s .pak $lang)"
           install -Dm644 -t "${FLATPAK_DEST}/share/runtime/locale/${locale%%-*}/" "$lang"
-          ln -sf "${FLATPAK_DEST}/share/runtime/locale/${locale%%-*}/$(basename $lang)" "${FLATPAK_DEST}/Bitwarden/locales/$(basename $lang)"
+          ln -sf "${FLATPAK_DEST}/share/runtime/locale/${locale%%-*}/$(basename $lang)" "${FLATPAK_DEST}/bitwarden-desktop/locales/$(basename $lang)"
         done
     sources:
-      - type: file
-        only-arches:
-          - x86_64
-        url: https://github.com/bitwarden/clients/releases/download/desktop-v2023.1.1/Bitwarden-2023.1.1-amd64.deb
-        sha256: 6cbdf26c4ae96398de0a2c45f2ab54fc3437e7153ee372bd697ade1eca0217b4
+      - type: git
+        url: https://github.com/bitwarden/clients.git
+        tag: desktop-v2023.1.1
         x-checker-data:
           type: anitya
           project-id: 179174
-          url-template: https://github.com/bitwarden/clients/releases/download/desktop-v$version/Bitwarden-$version-amd64.deb
-          is-main-source: true
+          tag-template: desktop-v$version
       - type: script
         dest-filename: bitwarden.sh
         commands:
           - export TMPDIR="$XDG_RUNTIME_DIR/app/$FLATPAK_ID"
-          - exec zypak-wrapper /app/Bitwarden/bitwarden "$@"
+          - exec zypak-wrapper /app/bitwarden-desktop/bitwarden "$@"
       - type: file
         path: com.bitwarden.desktop.metainfo.xml
+      - type: file
+        path: com.bitwarden.desktop.desktop
+
+      # flatpak-node-generator --electron-node-headers npm package-lock.json -o node-sources.json
+      - node-sources.json
+      # flatpak-cargo-generator.py Cargo.lock -o cargo-sources.json
+      - cargo-sources.json
 
   - name: bitwarden-cli
     buildsystem: simple
+    build-options:
+      # Add the node bin directory.
+      append-path: "/usr/lib/sdk/node16/bin:/run/build/bitwarden-cli/flatpak-node/chromedrive:/usr/lib/sdk/rust-stable/bin"
+      env:
+        # Don't add ELECTRON_CACHE
+        XDG_CACHE_HOME: /run/build/bitwarden-cli/flatpak-node/cache
+        npm_config_nodedir: /usr/lib/sdk/node16
+        npm_config_offline: "true"
+        npm_config_no_save: "true"
+        npm_config_cache: /run/build/bitwarden-cli/flatpak-node/npm-cache
+        npm_config_loglevel: "verbose"
+        # https://stackoverflow.com/questions/25146976/can-i-get-npm-gyp-to-use-ccache
+        CXX: ccache g++
+        ELECTRON_SKIP_BINARY_DOWNLOAD: "true"
+
+        PKG_CACHE_PATH: /run/build/bitwarden-cli/pkg-cache
+        PKG_IGNORE_TAG: "1"
+
+      arch:
+        # https://github.com/sass/node-sass/issues/3033#issuecomment-763180778
+        # The architecture of Electron, see https://electronjs.org/docs/tutorial/support#supported-platforms
+        # for supported architectures.
+        i386:
+          env:
+            npm_config_arch: ia32
+            npm_config_target_arch: ia32
+        x86_64:
+          env:
+            npm_config_arch: x64
+            npm_config_target_arch: x64
+        arm:
+          env:
+            npm_config_arch: armv7l
+            npm_config_target_arch: armv7l
+        aarch64:
+          env:
+            npm_config_arch: arm64
+            npm_config_target_arch: arm64
     build-commands:
-      - unzip bw-linux*.zip
-      - install -D -m 755 -t "${FLATPAK_DEST}/bin" bw
+      # Flatpak doesn't support git sources with protocols other than http(s): https://github.com/flathub/flatpak-builder-lint/blob/ed33aef30c1590b6ef579ef40b07f81802e10ed3/flatpak_builder_lint/checks/modules.py#L43
+      - sed -i -e "s,git+ssh://git@github.com/duosecurity/duo_web_sdk.git,git+https://github.com/duosecurity/duo_web_sdk.git,g" package-lock.json
+
+      - npm ci --offline
+
+      # https://github.com/bitwarden/clients/blob/d40a891f719371c20a46a00e4ac04bf24801e56d/apps/cli/package.json#LL34C17-L34C55
+      - npm run --prefix=apps/cli --offline build:prod --${npm_config_arch}
+      - npm --prefix=apps/cli run clean
+      - npx --prefix=apps/cli pkg apps/cli --targets host --output apps/cli/dist/linux/bw
+
+      - install -Dm 755 apps/cli/dist/linux/bw ${FLATPAK_DEST}/bin/bw
     sources:
-      - type: file
-        only-arches:
-          - x86_64
-        url: https://github.com/bitwarden/clients/releases/download/cli-v2023.1.0/bw-linux-2023.1.0.zip
-        sha256: 523684cc0b4f048c923525c2e23047b85ddb72341ea25c2fb3b140cbd2e37e8d
+      - type: git
+        url: https://github.com/bitwarden/clients.git
+        tag: cli-v2023.1.0
         x-checker-data:
           type: anitya
           project-id: 229011
-          url-template: https://github.com/bitwarden/clients/releases/download/cli-v$version/bw-linux-$version.zip
+          tag-template: cli-v$version
+
+      # `node` binary with patches for `pkg`: https://www.npmjs.com/package/pkg#build
+      - type: file
+        only-arches: ["x86_64"]
+        # Versions are from https://github.com/bitwarden/clients/blob/d40a891f719371c20a46a00e4ac04bf24801e56d/.github/workflows/build-cli.yml#L75-L76
+        # Have to be updated manually since there are 2 versions in the URL
+        url: https://github.com/vercel/pkg-fetch/releases/download/v3.4/node-v16.16.0-linux-x64
+        sha256: f1a561aadf78e438e73b043a3c5d7b9fe075d7abcaaec6f29d9e2a0ba00d3a69
+        dest: pkg-cache
+        dest-filename: fetched-v16.16.0-linux-x64
+      - type: file
+        only-arches: ["aarch64"]
+        url: https://github.com/vercel/pkg-fetch/releases/download/v3.4/node-v16.16.0-linux-arm64
+        sha256: e3913ecef725f83ccbd2181d7d33043f8b3e72466d09897c338ee328cffc3bfe
+        dest: pkg-cache
+        dest-filename: fetched-v16.16.0-linux-arm64
+
+      # flatpak-node-generator --electron-node-headers npm package-lock.json -o node-sources.json
+      - node-sources.json
+      # flatpak-cargo-generator.py Cargo.lock -o cargo-sources.json
+      - cargo-sources.json
