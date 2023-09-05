@@ -12,6 +12,7 @@ finish-args:
   - --socket=x11
   - --device=dri
   - --env=XDG_CURRENT_DESKTOP=Unity
+  - --system-talk-name=org.freedesktop.login1
   - --talk-name=org.kde.StatusNotifierWatcher
   - --talk-name=org.freedesktop.Notifications
   - --talk-name=org.freedesktop.secrets
