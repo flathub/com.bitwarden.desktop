@@ -9,7 +9,7 @@ finish-args:
   - --share=ipc
   - --share=network
   - --socket=wayland
-  - --socket=x11
+  - --socket=fallback-x11
   - --device=dri
   - --env=XDG_CURRENT_DESKTOP=Unity
   - --env=XCURSOR_PATH=/run/host/user-share/icons:/run/host/share/icons
@@ -62,7 +62,7 @@ modules:
         dest-filename: bitwarden.sh
         commands:
           - export TMPDIR="$XDG_RUNTIME_DIR/app/$FLATPAK_ID"
-          - exec zypak-wrapper /app/Bitwarden/bitwarden "$@"
+          - exec zypak-wrapper /app/Bitwarden/bitwarden --ozone-platform-hint=auto --enable-features=WaylandWindowDecorations "$@"
       - type: file
         path: com.bitwarden.desktop.metainfo.xml
 
