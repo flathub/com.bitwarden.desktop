@@ -9,7 +9,7 @@ finish-args:
   - --share=ipc
   - --share=network
   - --socket=wayland
-  - --socket=fallback-x11
+  - --socket=x11
   - --device=dri
   - --env=XDG_CURRENT_DESKTOP=Unity
   - --env=XCURSOR_PATH=/run/host/user-share/icons:/run/host/share/icons
