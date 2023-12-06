@@ -52,8 +52,8 @@ modules:
       - type: file
         only-arches:
           - x86_64
-        url: https://github.com/bitwarden/clients/releases/download/desktop-v2023.10.1/Bitwarden-2023.10.1-amd64.deb
-        sha256: d553ee29e9dfa529a725c27569fd216535b65e8958603a6d44bbb1d160e50ecc
+        url: https://github.com/bitwarden/clients/releases/download/desktop-v2023.12.0/Bitwarden-2023.12.0-amd64.deb
+        sha256: 6ee928510011f7dac827a6bfae973870442798d810ad838c2c9f206b3b0198e8
         x-checker-data:
           type: anitya
           project-id: 179174
@@ -63,7 +63,8 @@ modules:
         dest-filename: bitwarden.sh
         commands:
           - export TMPDIR="$XDG_RUNTIME_DIR/app/$FLATPAK_ID"
-          - exec zypak-wrapper /app/Bitwarden/bitwarden --ozone-platform-hint=auto --enable-features=WaylandWindowDecorations "$@"
+          - exec zypak-wrapper /app/Bitwarden/bitwarden --ozone-platform-hint=auto
+            --enable-features=WaylandWindowDecorations "$@"
       - type: file
         path: com.bitwarden.desktop.metainfo.xml
 
@@ -76,8 +77,8 @@ modules:
       - type: file
         only-arches:
           - x86_64
-        url: https://github.com/bitwarden/clients/releases/download/cli-v2023.10.0/bw-linux-2023.10.0.zip
-        sha256: 25b3376c7b215b9850844a14a15daa8b88817445acd0af12f5f2942606ef108a
+        url: https://github.com/bitwarden/clients/releases/download/cli-v2023.12.0/bw-linux-2023.12.0.zip
+        sha256: 2ac59071fbc7a39090b05a986bf9179c55f480b21564aa02aa83ad76303282fa
         x-checker-data:
           type: anitya
           project-id: 229011
