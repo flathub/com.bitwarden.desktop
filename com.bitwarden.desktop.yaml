@@ -22,8 +22,6 @@ finish-args:
 rename-desktop-file: bitwarden.desktop
 rename-icon: bitwarden
 modules:
-  - shared-modules/libsecret/libsecret.json
-
   - name: bitwarden-desktop
     buildsystem: simple
     build-commands:
