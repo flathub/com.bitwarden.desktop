@@ -49,8 +49,8 @@ modules:
       - type: file
         only-arches:
           - x86_64
-        url: https://github.com/bitwarden/clients/releases/download/desktop-v2024.2.1/Bitwarden-2024.2.1-amd64.deb
-        sha256: ccfedd67d2c8785d1e2f17ccf8024a065e8c01c8f680d61bfe6817d1816c6de4
+        url: https://github.com/bitwarden/clients/releases/download/desktop-v2024.3.0/Bitwarden-2024.3.0-amd64.deb
+        sha256: a257ff2f9b6671304ce9509586dfda6a0c5344479a0c3887c1f85d3cf9e32708
         x-checker-data:
           type: anitya
           project-id: 179174

@@ -58,6 +58,7 @@
   <developer_name>8bit Solutions LLC</developer_name>
   <update_contact>hello@bitwarden.com</update_contact>
   <releases>
+    <release version="2024.3.0" date="2024-03-12"/>
     <release version="2024.2.1" date="2024-03-07"/>
     <release version="2024.2.0" date="2024-02-07"/>
     <release version="2024.1.0" date="2024-01-10"/>
