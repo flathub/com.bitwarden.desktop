@@ -49,7 +49,8 @@
   </categories>
   <screenshots>
     <screenshot type="default">
-      <image>https://raw.githubusercontent.com/bitwarden/brand/master/screenshots/desktop-macos-vault.png</image>
+      <image>https://res.cloudinary.com/bw-com/image/upload/f_auto/v1/ctf/7rncvj1f8mw7/1PO0QhQSXq0swBoa9dxpsn/11b3504508449f6b03b63a12e5632b48/Bitwarden-multiple-devices.webp</image>
+      <caption>Bitwarden on multiple devices</caption>
     </screenshot>
   </screenshots>
   <url type="homepage">https://www.bitwarden.com/</url>
