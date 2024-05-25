@@ -40,8 +40,7 @@
       contribute to the Bitwarden codebase.
     </p>
     <p>
-      This wrapper is not verified by, affiliated with, or supported by 8bit
-      Solutions LLC.
+      This wrapper is not verified by, affiliated with, or supported by Bitwarden Inc.
     </p>
   </description>
   <categories>
@@ -56,7 +55,7 @@
   <url type="homepage">https://www.bitwarden.com/</url>
   <url type="bugtracker">https://github.com/bitwarden/clients/issues/</url>
   <url type="help">https://bitwarden.com/help/</url>
-  <developer_name>8bit Solutions LLC</developer_name>
+  <developer_name>Bitwarden Inc.</developer_name>
   <update_contact>hello@bitwarden.com</update_contact>
   <releases>
     <release version="2024.5.0" date="2024-05-21">
