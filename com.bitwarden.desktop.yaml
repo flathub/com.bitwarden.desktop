@@ -17,6 +17,7 @@ finish-args:
   - --talk-name=org.freedesktop.Notifications
   - --talk-name=org.freedesktop.secrets
   - --talk-name=com.canonical.AppMenu.Registrar
+  - --system-talk-name=org.freedesktop.PolicyKit1
   - --system-talk-name=org.freedesktop.login1
   - --filesystem=xdg-download
 rename-desktop-file: bitwarden.desktop
