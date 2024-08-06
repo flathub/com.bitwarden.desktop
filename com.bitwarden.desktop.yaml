@@ -18,6 +18,9 @@ finish-args:
   - --talk-name=org.freedesktop.secrets
   - --talk-name=com.canonical.AppMenu.Registrar
   - --system-talk-name=org.freedesktop.PolicyKit1
+    # Lock on lockscreen
+  - --talk-name=org.gnome.ScreenSaver
+  - --talk-name=org.freedesktop.ScreenSaver
   - --system-talk-name=org.freedesktop.login1
   - --filesystem=xdg-download
 rename-desktop-file: bitwarden.desktop
@@ -50,8 +53,8 @@ modules:
       - type: file
         only-arches:
           - x86_64
-        url: https://github.com/bitwarden/clients/releases/download/desktop-v2024.5.0/Bitwarden-2024.5.0-amd64.deb
-        sha256: dc614a17d786c25244c355f10ea0c46b7a178f31dfcf626c0996cdfb1d93679d
+        url: https://github.com/bitwarden/clients/releases/download/desktop-v2024.7.1/Bitwarden-2024.7.1-amd64.deb
+        sha256: f8476d16d25612bd5c2a6ed80a6faf9c512272b72eac031fb16a6be4d5d4f4ea
         x-checker-data:
           type: anitya
           project-id: 179174
@@ -75,8 +78,8 @@ modules:
       - type: file
         only-arches:
           - x86_64
-        url: https://github.com/bitwarden/clients/releases/download/cli-v2024.4.1/bw-linux-2024.4.1.zip
-        sha256: 53046db91e6877cca786d0bf0ea020747f977b0b71f0375f40b84c60dbcbfff7
+        url: https://github.com/bitwarden/clients/releases/download/cli-v2024.7.2/bw-linux-2024.7.2.zip
+        sha256: b7079c0be1b78e5e8fe140ab312dfb171d5a1c7b26d7861c04f071bddcfbf577
         x-checker-data:
           type: anitya
           project-id: 229011
