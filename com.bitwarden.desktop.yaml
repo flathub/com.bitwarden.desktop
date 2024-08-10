@@ -17,6 +17,7 @@ finish-args:
   - --talk-name=org.freedesktop.Notifications
   - --talk-name=org.freedesktop.secrets
   - --talk-name=com.canonical.AppMenu.Registrar
+  - --system-talk-name=org.freedesktop.PolicyKit1
     # Lock on lockscreen
   - --talk-name=org.gnome.ScreenSaver
   - --talk-name=org.freedesktop.ScreenSaver
