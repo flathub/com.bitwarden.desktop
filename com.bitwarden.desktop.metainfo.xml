@@ -4,7 +4,7 @@
   <id>com.bitwarden.desktop</id>
   <launchable type="desktop-id">com.bitwarden.desktop.desktop</launchable>
   <metadata_license>CC0-1.0</metadata_license>
-  <project_license>GPL-3.0</project_license>
+  <project_license>LicenseRef-proprietary</project_license>
   <name>Bitwarden</name>
   <summary>A secure and free password manager for all of your devices</summary>
   <description>
@@ -33,11 +33,6 @@
       team at Bitwarden can read your data, even if we wanted to. Your data
       is sealed with AES-256 bit encryption, salted hashing, and PBKDF2
       SHA-256.
-    </p>
-    <p>
-      Bitwarden is 100% open source software. The source code for Bitwarden
-      is hosted on GitHub and everyone is free to review, audit, and
-      contribute to the Bitwarden codebase.
     </p>
     <p>
       This wrapper is not verified by, affiliated with, or supported by Bitwarden Inc.
