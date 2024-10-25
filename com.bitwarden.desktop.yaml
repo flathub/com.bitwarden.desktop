@@ -100,7 +100,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/bitwarden/clients.git
-        tag: desktop-v2023.1.1
+        tag: desktop-v2024.10.1
         x-checker-data:
           type: anitya
           project-id: 179174
