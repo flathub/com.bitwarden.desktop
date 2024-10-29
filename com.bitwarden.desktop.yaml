@@ -102,6 +102,7 @@ modules:
       - type: git
         url: https://github.com/bitwarden/clients.git
         branch: km/tmp-flatpak
+        commit: ff084f6fce39ff535bfbc69f076516e869395d0d
       - type: script
         dest-filename: bitwarden.sh
         commands:
