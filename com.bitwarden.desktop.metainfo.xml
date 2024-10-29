@@ -40,8 +40,7 @@
       contribute to the Bitwarden codebase.
     </p>
     <p>
-      This wrapper is not verified by, affiliated with, or supported by 8bit
-      Solutions LLC.
+      This wrapper is not verified by, affiliated with, or supported by Bitwarden Inc.
     </p>
   </description>
   <categories>
@@ -49,15 +48,75 @@
   </categories>
   <screenshots>
     <screenshot type="default">
-      <image>https://raw.githubusercontent.com/bitwarden/brand/master/screenshots/desktop-macos-vault.png</image>
+      <image>https://res.cloudinary.com/bw-com/image/upload/f_auto/v1/ctf/7rncvj1f8mw7/1PO0QhQSXq0swBoa9dxpsn/11b3504508449f6b03b63a12e5632b48/Bitwarden-multiple-devices.webp</image>
+      <caption>Bitwarden on multiple devices</caption>
     </screenshot>
   </screenshots>
   <url type="homepage">https://www.bitwarden.com/</url>
   <url type="bugtracker">https://github.com/bitwarden/clients/issues/</url>
   <url type="help">https://bitwarden.com/help/</url>
-  <developer_name>8bit Solutions LLC</developer_name>
+  <developer_name>Bitwarden Inc.</developer_name>
   <update_contact>hello@bitwarden.com</update_contact>
   <releases>
+    <release version="2024.9.0" date="2024-09-19">
+      <description></description>
+    </release>
+    <release version="2024.8.2" date="2024-09-05">
+      <description/>
+    </release>
+    <release version="2024.8.1" date="2024-08-27">
+      <description/>
+    </release>
+    <release version="2024.8.0" date="2024-08-23">
+      <description/>
+    </release>
+    <release version="2024.7.1" date="2024-07-26">
+      <description/>
+    </release>
+    <release version="2024.6.4" date="2024-07-02">
+      <description/>
+    </release>
+    <release version="2024.6.2" date="2024-06-18">
+      <description/>
+    </release>
+    <release version="2024.6.1" date="2024-06-14">
+      <description/>
+    </release>
+    <release version="2024.6.0" date="2024-06-12">
+      <description/>
+    </release>
+    <release version="2024.5.0" date="2024-05-21">
+      <description/>
+    </release>
+    <release version="2024.4.3" date="2024-05-06">
+      <description/>
+    </release>
+    <release version="2024.4.1" date="2024-04-12"/>
+    <release version="2024.4.0" date="2024-04-11"/>
+    <release version="2024.3.2" date="2024-04-08"/>
+    <release version="2024.3.0" date="2024-03-12"/>
+    <release version="2024.2.1" date="2024-03-07"/>
+    <release version="2024.2.0" date="2024-02-07"/>
+    <release version="2024.1.0" date="2024-01-10"/>
+    <release version="2023.12.1" date="2023-12-21"/>
+    <release version="2023.12.0" date="2023-12-06"/>
+    <release version="2023.10.1" date="2023-11-07"/>
+    <release version="2023.10.0" date="2023-11-01"/>
+    <release version="2023.9.3" date="2023-10-17"/>
+    <release version="2023.9.2" date="2023-10-11"/>
+    <release version="2023.9.1" date="2023-09-29"/>
+    <release version="2023.9.0" date="2023-09-20"/>
+    <release version="2023.8.4" date="2023-09-14"/>
+    <release version="2023.8.3" date="2023-09-06"/>
+    <release version="2023.8.2" date="2023-08-26"/>
+    <release version="2023.7.0" date="2023-07-13"/>
+    <release version="2023.5.1" date="2023-06-21"/>
+    <release version="2023.5.0" date="2023-05-31"/>
+    <release version="2023.4.0" date="2023-04-26"/>
+    <release version="2023.3.2" date="2023-04-07"/>
+    <release version="2023.3.1" date="2023-03-28"/>
+    <release version="2023.3.0" date="2023-03-22"/>
+    <release version="2023.2.0" date="2023-02-15"/>
     <release version="2023.1.1" date="2023-01-13"/>
     <release version="2023.1.0" date="2023-01-11"/>
     <release version="2022.12.0" date="2022-12-14"/>
