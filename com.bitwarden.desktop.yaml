@@ -13,9 +13,8 @@ finish-args:
   - --share=ipc
   - --share=network
 
-  # GUI, xwayland is default, can fallback to x11 (with native wayland currently blocked by https://github.com/bitwarden/clients/pull/10359)
-  - --socket=wayland
-  - --socket=fallback-x11
+  # GUI, xwayland is defaul; native wayland currently blocked by https://github.com/bitwarden/clients/pull/10359
+  - --socket=x11
   - --device=dri
 
   - --env=XDG_CURRENT_DESKTOP=Unity
