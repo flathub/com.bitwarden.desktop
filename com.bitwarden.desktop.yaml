@@ -12,19 +12,28 @@ sdk-extensions:
 finish-args:
   - --share=ipc
   - --share=network
+
+  # GUI, xwayland is default, can fallback to x11 (with native wayland currently blocked by https://github.com/bitwarden/clients/pull/10359)
+  - --socket=wayland
   - --socket=fallback-x11
   - --device=dri
+
   - --env=XDG_CURRENT_DESKTOP=Unity
   - --env=XCURSOR_PATH=/run/host/user-share/icons:/run/host/share/icons
   - --talk-name=org.kde.StatusNotifierWatcher
   - --talk-name=org.freedesktop.Notifications
-  - --talk-name=org.freedesktop.secrets
   - --talk-name=com.canonical.AppMenu.Registrar
+
+  # System authentication / biometric unlock + auth token storage
   - --system-talk-name=org.freedesktop.PolicyKit1
-    # Lock on lockscreen
+  - --talk-name=org.freedesktop.secrets
+
+  # Lock on lockscreen
   - --talk-name=org.gnome.ScreenSaver
   - --talk-name=org.freedesktop.ScreenSaver
   - --system-talk-name=org.freedesktop.login1
+
+  # Exports
   - --filesystem=xdg-download
 modules:
   - shared-modules/libsecret/libsecret.json
