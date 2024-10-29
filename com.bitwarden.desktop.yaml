@@ -99,8 +99,9 @@ modules:
           ln -sf "${FLATPAK_DEST}/share/runtime/locale/${locale%%-*}/$(basename $lang)" "${FLATPAK_DEST}/bitwarden-desktop/locales/$(basename $lang)"
         done
     sources:
-      - type: dir
-        path: /home/quexten/projects/clients2/
+      - type: git
+        url: https://github.com/bitwarden/clients.git
+        branch: km/tmp-flatpak
       - type: script
         dest-filename: bitwarden.sh
         commands:
