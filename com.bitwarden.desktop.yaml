@@ -121,7 +121,7 @@ modules:
         dest-filename: bitwarden.sh
         commands:
           - export TMPDIR="$XDG_RUNTIME_DIR/app/$FLATPAK_ID"
-          - exec zypak-wrapper /app/bitwarden-desktop/bitwarden "$@"
+          - exec zypak-wrapper /app/bitwarden-desktop/bitwarden --enable-features=WaylandWindowDecorations "$@"
       - type: file
         path: com.bitwarden.desktop.metainfo.xml
       - type: file
