@@ -36,6 +36,8 @@ finish-args:
   # Exports
   - --filesystem=xdg-download
 modules:
+  - shared-modules/libsecret/libsecret.json
+
   - name: bitwarden-desktop
     buildsystem: simple
     build-options:
