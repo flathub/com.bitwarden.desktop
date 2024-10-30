@@ -7,13 +7,18 @@ jobs:
   update:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - Set up Python
+        uses: actions/setup-python@v4
         with:
           python-version: "3.10"
 
       - name: Setup environment variables
         run: |
+          git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+          git config user.name "Workflow trigger"
           echo "FLATPAK_BUILDER_TOOLS_DIR=/tmp/flatpak-builder-tools" >> $GITHUB_ENV
           echo "BITWARDEN_DESKTOP_VERSION="$(yq '.modules[1].sources[0].tag' 'com.bitwarden.desktop.yaml')"" >> $GITHUB_ENV
 
@@ -26,16 +31,22 @@ jobs:
       # Need to replace git+ssh with git+https:// since Flathub only supports git+http(s)://
       - name: Update Node.js generated sources
         run: |
-          wget "https://github.com/bitwarden/clients/raw/${BITWARDEN_DESKTOP_VERSION}/package-lock.json" -O package-lock.json
+          wget "https://github.com/bitwarden/clients/raw/main/package.json"
+
+          sed -i -e "/@storybook\/angular\": \"/d" ./package.json
+          sed -i -e "/postinstall\": \"/d" ./package.json
+          sed -i -e 's/"@electron\/rebuild": "[^"]*"/"@electron\/rebuild": "3.6.0"/' package.json
+
+          npm i --lockfile-version 2 --package-lock-only
 
           sed -i -e "s,git+ssh://git@github.com/,git+https://github.com/,g" package-lock.json
-
+          # ~/.local/share/pipx/venvs/flatpak-node-generator/bin/flatpak-node-generator npm package-lock.json
           flatpak-node-generator --electron-node-headers npm package-lock.json -o node-sources.json
-          rm package-lock.json
+          rm package-lock.json package.json
 
       - name: Update Rust generated sources
         run: |
-          wget "https://github.com/bitwarden/clients/raw/${BITWARDEN_DESKTOP_VERSION}/apps/desktop/desktop_native/Cargo.lock" -O Cargo.lock
+          wget "https://github.com/bitwarden/clients/raw/main/apps/desktop/desktop_native/Cargo.lock" -O Cargo.lock
           python3 ${FLATPAK_BUILDER_TOOLS_DIR}/cargo/flatpak-cargo-generator.py Cargo.lock -o cargo-sources.json
           rm Cargo.lock
 
@@ -44,9 +55,6 @@ jobs:
           set -e
 
           [[ ! $(git status --porcelain) ]] && exit 0
-
-          git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
-          git config user.name "Workflow trigger"
 
           git add node-sources.json cargo-sources.json
           git commit -m 'Update generated sources'
