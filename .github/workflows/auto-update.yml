@@ -20,7 +20,6 @@ jobs:
           git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
           git config user.name "Workflow trigger"
           echo "FLATPAK_BUILDER_TOOLS_DIR=/tmp/flatpak-builder-tools" >> $GITHUB_ENV
-          echo "BITWARDEN_DESKTOP_VERSION="$(yq '.modules[1].sources[0].tag' 'com.bitwarden.desktop.yaml')"" >> $GITHUB_ENV
 
       - name: Setup flatpak-builder-tools
         run: |
@@ -34,7 +33,7 @@ jobs:
           wget "https://github.com/bitwarden/clients/raw/main/package.json"
 
           sed -i -e "/@storybook\/angular\": \"/d" ./package.json
-          sed -i -e "/postinstall\": \"/d" ./package.json
+          jq 'del(.script.postinstall)' package.json > package.json.tmp && mv package.json.tmp package.json
           sed -i -e 's/"@electron\/rebuild": "[^"]*"/"@electron\/rebuild": "3.6.0"/' package.json
 
           npm i --lockfile-version 2 --package-lock-only
