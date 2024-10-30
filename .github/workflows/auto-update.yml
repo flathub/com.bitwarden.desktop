@@ -34,8 +34,8 @@ jobs:
 
           sed -i -e "/@storybook\/angular\": \"/d" ./package.json
           sed -i -e 's/"@electron\/rebuild": "[^"]*"/"@electron\/rebuild": "3.6.0"/' package.json
-          
-          jq 'del(.script.postinstall)' package.json > package.json.tmp
+
+          jq 'del(.scripts.postinstall)' package.json > package.json.tmp
           rm package.json && mv package.json.tmp package.json
 
           npm i --lockfile-version 2 --package-lock-only
