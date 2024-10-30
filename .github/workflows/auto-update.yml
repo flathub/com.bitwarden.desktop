@@ -27,7 +27,6 @@ jobs:
           pip install --user pipx && pipx install ${FLATPAK_BUILDER_TOOLS_DIR}/node
           pip install --user toml aiohttp
 
-      # Need to replace git+ssh with git+https:// since Flathub only supports git+http(s)://
       - name: Update Node.js generated sources
         run: |
           wget "https://github.com/bitwarden/clients/raw/main/package.json"
@@ -41,7 +40,6 @@ jobs:
           npm i --lockfile-version 2 --package-lock-only
 
           sed -i -e "s,git+ssh://git@github.com/,git+https://github.com/,g" package-lock.json
-          # ~/.local/share/pipx/venvs/flatpak-node-generator/bin/flatpak-node-generator npm package-lock.json
           flatpak-node-generator --electron-node-headers npm package-lock.json -o node-sources.json
           rm package-lock.json package.json
 
