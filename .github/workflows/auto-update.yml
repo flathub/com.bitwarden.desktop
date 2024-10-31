@@ -29,7 +29,7 @@ jobs:
 
       - name: Update Node.js generated sources
         run: |
-          wget "https://github.com/bitwarden/clients/raw/main/package.json"
+          wget "https://github.com/bitwarden/clients/raw/cb1c35c234736d9dde3b0fe66c6eaf9f411ad83c/package.json"
 
           sed -i -e "/@storybook\/angular\": \"/d" ./package.json
           sed -i -e 's/"@electron\/rebuild": "[^"]*"/"@electron\/rebuild": "3.6.0"/' package.json
@@ -45,7 +45,7 @@ jobs:
 
       - name: Update Rust generated sources
         run: |
-          wget "https://github.com/bitwarden/clients/raw/main/apps/desktop/desktop_native/Cargo.lock" -O Cargo.lock
+          wget "https://github.com/bitwarden/clients/raw/cb1c35c234736d9dde3b0fe66c6eaf9f411ad83c/apps/desktop/desktop_native/Cargo.lock" -O Cargo.lock
           python3 ${FLATPAK_BUILDER_TOOLS_DIR}/cargo/flatpak-cargo-generator.py Cargo.lock -o cargo-sources.json
           rm Cargo.lock
 
