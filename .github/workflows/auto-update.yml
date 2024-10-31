@@ -29,19 +29,21 @@ jobs:
 
       - name: Update Node.js generated sources
         run: |
-          wget "https://github.com/bitwarden/clients/raw/cb1c35c234736d9dde3b0fe66c6eaf9f411ad83c/package.json"
-          wget "https://github.com/bitwarden/clients/raw/cb1c35c234736d9dde3b0fe66c6eaf9f411ad83c/package-lock.json"
+          git clone https://github.com/bitwarden/clients
+          cd clients && git fetch -a
+          cd clients && git checkout cb1c35c234736d9dde3b0fe66c6eaf9f411ad83c
 
-          sed -i -e "/@storybook\/angular\": \"/d" ./package.json
-          sed -i -e 's/"@electron\/rebuild": "[^"]*"/"@electron\/rebuild": "3.6.0"/' package.json
+          sed -i -e "/@storybook\/angular\": \"/d" ./clients/package.json
+          sed -i -e 's/"@electron\/rebuild": "[^"]*"/"@electron\/rebuild": "3.6.0"/' ./clients/package.json
 
-          jq 'del(.scripts.postinstall, .scripts.prepare)' package.json > package.json.tmp
-          rm package.json && mv package.json.tmp package.json
+          jq 'del(.scripts.postinstall, .scripts.prepare)' ./clients/package.json > package.json.tmp
+          rm ./clients/package.json && mv package.json.tmp ./clients/package.json
 
-          npm i --lockfile-version 2 --package-lock-only
+          cd clients && npm install
+          cd clients && npm i --lockfile-version 2 --package-lock-only
 
-          sed -i -e "s,git+ssh://git@github.com/,git+https://github.com/,g" package-lock.json
-          flatpak-node-generator --electron-node-headers npm package-lock.json -o node-sources.json
+          sed -i -e "s,git+ssh://git@github.com/,git+https://github.com/,g" ./clients/package-lock.json
+          cd clients && flatpak-node-generator --electron-node-headers npm package-lock.json -o ../node-sources.json
           rm package-lock.json package.json
 
       - name: Update Rust generated sources
