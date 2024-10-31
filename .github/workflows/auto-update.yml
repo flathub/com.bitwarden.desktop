@@ -31,6 +31,7 @@ jobs:
         run: |
           git clone https://github.com/bitwarden/clients ./clients
           ls -lah ./
+          ls -lah ./clients/
           cd clients && git fetch -a
           cd clients && git checkout cb1c35c234736d9dde3b0fe66c6eaf9f411ad83c
 
