@@ -29,23 +29,24 @@ jobs:
 
       - name: Update Node.js generated sources
         run: |
-          git clone https://github.com/bitwarden/clients ./clients
-          ls -lah ./
-          ls -lah ./clients/
-          cd ./clients/ && git fetch -a
-          cd ./clients/ && git checkout cb1c35c234736d9dde3b0fe66c6eaf9f411ad83c
+          git clone https://github.com/bitwarden/clients ./clients/
+          cd ./clients/
 
-          cd ./clients/ && sed -i -e "/@storybook\/angular\": \"/d" ./package.json
-          cd ./clients/ && sed -i -e 's/"@electron\/rebuild": "[^"]*"/"@electron\/rebuild": "3.6.0"/' ./package.json
+          git fetch -a
+          git checkout cb1c35c234736d9dde3b0fe66c6eaf9f411ad83c
 
-          jq 'del(.scripts.postinstall, .scripts.prepare)' ./clients/package.json > package.json.tmp
-          rm ./clients/package.json && mv package.json.tmp ./clients/package.json
+          sed -i -e "/@storybook\/angular\": \"/d" ./package.json
+          sed -i -e 's/"@electron\/rebuild": "[^"]*"/"@electron\/rebuild": "3.6.0"/' ./package.json
 
-          cd clients && npm install
-          cd clients && npm i --lockfile-version 2 --package-lock-only
+          jq 'del(.scripts.postinstall, .scripts.prepare)' ./package.json > package.json.tmp
+          rm ./package.json && mv package.json.tmp ./package.json
 
-          sed -i -e "s,git+ssh://git@github.com/,git+https://github.com/,g" ./clients/package-lock.json
-          cd clients && flatpak-node-generator --electron-node-headers npm package-lock.json -o ../node-sources.json
+          npm install
+          npm i --lockfile-version 2 --package-lock-only
+
+          sed -i -e "s,git+ssh://git@github.com/,git+https://github.com/,g" ./package-lock.json
+          flatpak-node-generator --electron-node-headers npm package-lock.json -o ../node-sources.json
+          cd ../
           rm clients
 
       - name: Update Rust generated sources
