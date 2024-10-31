@@ -32,11 +32,11 @@ jobs:
           git clone https://github.com/bitwarden/clients ./clients
           ls -lah ./
           ls -lah ./clients/
-          cd clients && git fetch -a
-          cd clients && git checkout cb1c35c234736d9dde3b0fe66c6eaf9f411ad83c
+          cd ./clients/ && git fetch -a
+          cd ./clients/ && git checkout cb1c35c234736d9dde3b0fe66c6eaf9f411ad83c
 
-          sed -i -e "/@storybook\/angular\": \"/d" ./clients/package.json
-          sed -i -e 's/"@electron\/rebuild": "[^"]*"/"@electron\/rebuild": "3.6.0"/' ./clients/package.json
+          cd ./clients/ && sed -i -e "/@storybook\/angular\": \"/d" ./package.json
+          cd ./clients/ && sed -i -e 's/"@electron\/rebuild": "[^"]*"/"@electron\/rebuild": "3.6.0"/' ./package.json
 
           jq 'del(.scripts.postinstall, .scripts.prepare)' ./clients/package.json > package.json.tmp
           rm ./clients/package.json && mv package.json.tmp ./clients/package.json
