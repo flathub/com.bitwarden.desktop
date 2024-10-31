@@ -5,82 +5,122 @@ sdk: org.freedesktop.Sdk
 base: org.electronjs.Electron2.BaseApp
 base-version: '24.08'
 command: bitwarden
+sdk-extensions:
+  # Node.js version: https://github.com/bitwarden/clients/blob/e2c25c6aad47d1e086ee8bb749e413cd93f89ca8/.nvmrc
+  - org.freedesktop.Sdk.Extension.node20
+  - org.freedesktop.Sdk.Extension.rust-stable
 finish-args:
   - --share=ipc
   - --share=network
-  - --socket=wayland
+
+  # GUI, xwayland is defaul; native wayland currently blocked by https://github.com/bitwarden/clients/pull/10359
   - --socket=x11
   - --device=dri
+
   - --env=XDG_CURRENT_DESKTOP=Unity
   - --env=XCURSOR_PATH=/run/host/user-share/icons:/run/host/share/icons
   - --talk-name=org.kde.StatusNotifierWatcher
   - --talk-name=org.freedesktop.Notifications
-  - --talk-name=org.freedesktop.secrets
   - --talk-name=com.canonical.AppMenu.Registrar
+
+  # System authentication / biometric unlock + auth token storage
   - --system-talk-name=org.freedesktop.PolicyKit1
-    # Lock on lockscreen
+  - --talk-name=org.freedesktop.secrets
+
+  # Lock on lockscreen
   - --talk-name=org.gnome.ScreenSaver
   - --talk-name=org.freedesktop.ScreenSaver
   - --system-talk-name=org.freedesktop.login1
+
+  # Exports
   - --filesystem=xdg-download
-rename-desktop-file: bitwarden.desktop
-rename-icon: bitwarden
 modules:
+  - shared-modules/libsecret/libsecret.json
+
   - name: bitwarden-desktop
     buildsystem: simple
+    build-options:
+      # Add the node bin directory.
+      append-path: "/usr/lib/sdk/node20/bin:/run/build/bitwarden-desktop/flatpak-node/chromedrive:/usr/lib/sdk/rust-stable/bin"
+      env:
+        # Don't add ELECTRON_CACHE
+        XDG_CACHE_HOME: /run/build/bitwarden-desktop/flatpak-node/cache
+        npm_config_nodedir: /usr/lib/sdk/node20
+        npm_config_offline: "true"
+        npm_config_no_save: "true"
+        npm_config_cache: /run/build/bitwarden-desktop/flatpak-node/npm-cache
+        npm_config_loglevel: "verbose"
+        # https://stackoverflow.com/questions/25146976/can-i-get-npm-gyp-to-use-ccache
+        CXX: ccache g++
+        ELECTRON_SKIP_BINARY_DOWNLOAD: "true"
+
+        CARGO_HOME: /run/build/bitwarden-desktop/cargo
+
+        # The intention is to have a release build with debugging symbols.
+        # The flatpak build process should separate the debug symbols.
+        RUSTFLAGS: "-g"
+
+      arch:
+        # https://github.com/sass/node-sass/issues/3033#issuecomment-763180778
+        # The architecture of Electron, see https://electronjs.org/docs/tutorial/support#supported-platforms
+        # for supported architectures.
+        x86_64:
+          env:
+            npm_config_arch: x64
+            npm_config_target_arch: x64
+        aarch64:
+          env:
+            npm_config_arch: arm64
+            npm_config_target_arch: arm64
     build-commands:
-      - ar -x Bitwarden*.deb
-      - rm -f Bitwarden*.deb
-      - tar -xf data.tar.xz
-      - rm -f control.tar.gz data.tar.xz debian-binary
-      - cp -r opt/* usr/* $FLATPAK_DEST
-      - rm -rf opt usr
-      - install bitwarden.sh $FLATPAK_DEST/bin/bitwarden
-      - install -D -m 644 -t $FLATPAK_DEST/share/metainfo $FLATPAK_ID.metainfo.xml
-      - desktop-file-edit --set-key=Exec --set-value="bitwarden %U" $FLATPAK_DEST/share/applications/bitwarden.desktop
-      - rm -rf "${FLATPAK_DEST}/share/icons/hicolor/1024x1024/"
+      # Flatpak doesn't support git sources with protocols other than http(s): https://github.com/flathub/flatpak-builder-lint/blob/ed33aef30c1590b6ef579ef40b07f81802e10ed3/flatpak_builder_lint/checks/modules.py#L43
+      - sed -i -e "s,git+ssh://git@github.com/duosecurity/duo_web_sdk.git,git+https://github.com/duosecurity/duo_web_sdk.git,g" package-lock.json
+      # Flatpak doesn't support building against musl yet
+      - sed -i -e "s,desktop_napi.linux-x64-musl,desktop_napi.linux-x64-gnu,g" -e "s,@bitwarden/desktop-napi-linux-x64-musl,@bitwarden/desktop-napi-linux-x64-gnu,g" apps/desktop/desktop_native/napi/index.js
+      - sed -i -e "s,desktop_napi.linux-arm64-musl,desktop_napi.linux-arm64-gnu,g" -e "s,@bitwarden/desktop-napi-linux-arm64-musl,@bitwarden/desktop-napi-linux-arm64-gnu,g" apps/desktop/desktop_native/napi/index.js
+
+      # Remove these deps since they break the build but are not required
+      - sed -i "/@storybook\/angular\": \"/d" ./package.json
+      - sed -i "/@storybook\/components/d" ./package.json
+
+      # Run build
+      - npm ci --offline
+      - source /usr/lib/sdk/rust-stable/enable.sh; npm run --prefix=apps/desktop/desktop_native/napi build
+      - npm run --prefix=apps/desktop dist:dir --${npm_config_arch}
+
+      # Remove unneeded files
+      - rm apps/desktop/dist/linux-*unpacked/chrome-sandbox
+
+      # Copy the resulting, unpacked directory to /app.
+      - cp -r apps/desktop/dist/linux-*unpacked ${FLATPAK_DEST}/bitwarden-desktop
+
+      - install -Dm644 "apps/desktop/resources/icon.iconset/icon_512x512.png" "${FLATPAK_DEST}/share/icons/hicolor/512x512/apps/${FLATPAK_ID}.png"
+      - install -Dm644 com.bitwarden.desktop.metainfo.xml ${FLATPAK_DEST}/share/metainfo/${FLATPAK_ID}.metainfo.xml
+      - install -Dm644 "apps/desktop/resources/com.bitwarden.desktop.desktop" ${FLATPAK_DEST}/share/applications/${FLATPAK_ID}.desktop
+      - install -Dm 755 bitwarden.sh ${FLATPAK_DEST}/bin/bitwarden
 
       # To allow separate locales
       # https://searchfox.org/mozilla-central/rev/8a4f55bc09ffc5c25dcb4586c51ae4a9fee77b4c/taskcluster/docker/firefox-flatpak/runme.sh#131-133
       - |
-        for lang in ${FLATPAK_DEST}/Bitwarden/locales/*.pak
+        for lang in ${FLATPAK_DEST}/bitwarden-desktop/locales/*.pak
         do
           locale="$(basename -s .pak $lang)"
           install -Dm644 -t "${FLATPAK_DEST}/share/runtime/locale/${locale%%-*}/" "$lang"
-          ln -sf "${FLATPAK_DEST}/share/runtime/locale/${locale%%-*}/$(basename $lang)" "${FLATPAK_DEST}/Bitwarden/locales/$(basename $lang)"
+          ln -sf "${FLATPAK_DEST}/share/runtime/locale/${locale%%-*}/$(basename $lang)" "${FLATPAK_DEST}/bitwarden-desktop/locales/$(basename $lang)"
         done
     sources:
-      - type: file
-        only-arches:
-          - x86_64
-        url: https://github.com/bitwarden/clients/releases/download/desktop-v2024.9.0/Bitwarden-2024.9.0-amd64.deb
-        sha256: 6f6abea0d831c853453ba7de1c4fc7b53e977a6e6a6067aaf17764790e426ef7
-        x-checker-data:
-          type: anitya
-          project-id: 179174
-          url-template: https://github.com/bitwarden/clients/releases/download/desktop-v$version/Bitwarden-$version-amd64.deb
-          is-main-source: true
+      - type: git
+        url: https://github.com/bitwarden/clients.git
+        commit: cb1c35c234736d9dde3b0fe66c6eaf9f411ad83c
       - type: script
         dest-filename: bitwarden.sh
         commands:
           - export TMPDIR="$XDG_RUNTIME_DIR/app/$FLATPAK_ID"
-          - exec zypak-wrapper /app/Bitwarden/bitwarden --ozone-platform-hint=auto
-            --enable-features=WaylandWindowDecorations "$@"
+          - exec zypak-wrapper /app/bitwarden-desktop/bitwarden --enable-features=WaylandWindowDecorations "$@"
       - type: file
         path: com.bitwarden.desktop.metainfo.xml
 
-  - name: bitwarden-cli
-    buildsystem: simple
-    build-commands:
-      - unzip bw-linux*.zip
-      - install -D -m 755 -t "${FLATPAK_DEST}/bin" bw
-    sources:
-      - type: file
-        only-arches:
-          - x86_64
-        url: https://github.com/bitwarden/clients/releases/download/cli-v2024.9.0/bw-linux-2024.9.0.zip
-        sha256: c8a1c702304b57ccf99d775cb250533bff530389f5aef31e4754614ee1ad4ab9
-        x-checker-data:
-          type: anitya
-          project-id: 229011
-          url-template: https://github.com/bitwarden/clients/releases/download/cli-v$version/bw-linux-$version.zip
+      # flatpak-node-generator --electron-node-headers npm package-lock.json -o node-sources.json
+      - node-sources.json
+      # flatpak-cargo-generator.py Cargo.lock -o cargo-sources.json
+      - cargo-sources.json

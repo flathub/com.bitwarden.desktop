@@ -1,0 +1,67 @@
+name: Auto update
+
+on:
+  push:
+
+jobs:
+  update:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: Setup environment variables
+        run: |
+          git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+          git config user.name "Workflow trigger"
+          echo "FLATPAK_BUILDER_TOOLS_DIR=/tmp/flatpak-builder-tools" >> $GITHUB_ENV
+
+      - name: Setup flatpak-builder-tools
+        run: |
+          git clone --depth=1 https://github.com/flatpak/flatpak-builder-tools ${FLATPAK_BUILDER_TOOLS_DIR}
+          pip install --user pipx && pipx install ${FLATPAK_BUILDER_TOOLS_DIR}/node
+          pip install --user toml aiohttp
+
+      - name: Update Node.js generated sources
+        run: |
+          git clone https://github.com/bitwarden/clients ./clients/
+          cd ./clients/
+
+          git fetch -a
+          git checkout cb1c35c234736d9dde3b0fe66c6eaf9f411ad83c
+
+          sed -i -e "/@storybook\/angular\": \"/d" ./package.json
+          sed -i -e 's/"@electron\/rebuild": "[^"]*"/"@electron\/rebuild": "3.6.0"/' ./package.json
+
+          jq 'del(.scripts.postinstall, .scripts.prepare)' ./package.json > package.json.tmp
+          rm ./package.json && mv package.json.tmp ./package.json
+
+          npm install
+          npm i --lockfile-version 2 --package-lock-only
+
+          sed -i -e "s,git+ssh://git@github.com/,git+https://github.com/,g" ./package-lock.json
+          flatpak-node-generator --electron-node-headers npm package-lock.json -o ../node-sources.json
+          cd ../
+          rm -rf ./clients/
+
+      - name: Update Rust generated sources
+        run: |
+          wget "https://github.com/bitwarden/clients/raw/cb1c35c234736d9dde3b0fe66c6eaf9f411ad83c/apps/desktop/desktop_native/Cargo.lock" -O Cargo.lock
+          python3 ${FLATPAK_BUILDER_TOOLS_DIR}/cargo/flatpak-cargo-generator.py Cargo.lock -o cargo-sources.json
+          rm Cargo.lock
+
+      - name: Commit updates
+        run: |
+          set -e
+
+          [[ ! $(git status --porcelain) ]] && exit 0
+
+          git add node-sources.json cargo-sources.json
+          git commit -m 'Update generated sources'
+
+          git push https://${GITHUB_ACTOR}:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}
