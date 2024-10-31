@@ -47,7 +47,7 @@ jobs:
           sed -i -e "s,git+ssh://git@github.com/,git+https://github.com/,g" ./package-lock.json
           flatpak-node-generator --electron-node-headers npm package-lock.json -o ../node-sources.json
           cd ../
-          rm clients
+          rm -rf ./clients/
 
       - name: Update Rust generated sources
         run: |
