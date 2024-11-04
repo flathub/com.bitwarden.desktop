@@ -111,7 +111,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/bitwarden/clients.git
-        commit: cb1c35c234736d9dde3b0fe66c6eaf9f411ad83c
+        tag: desktop-v2024.10.2
       - type: script
         dest-filename: bitwarden.sh
         commands:

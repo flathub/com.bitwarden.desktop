@@ -20,6 +20,7 @@ jobs:
           git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
           git config user.name "Workflow trigger"
           echo "FLATPAK_BUILDER_TOOLS_DIR=/tmp/flatpak-builder-tools" >> $GITHUB_ENV
+          echo "BITWARDEN_DESKTOP_VERSION=$(yq '.modules[1].sources[0].tag' com.bitwarden.desktop.yaml)" >> $GITHUB_ENV
 
       - name: Setup flatpak-builder-tools
         run: |
@@ -29,11 +30,8 @@ jobs:
 
       - name: Update Node.js generated sources
         run: |
-          git clone https://github.com/bitwarden/clients ./clients/
+          git clone --depth 1 --branch $BITWARDEN_DESKTOP_VERSION https://github.com/bitwarden/clients ./clients/
           cd ./clients/
-
-          git fetch -a
-          git checkout cb1c35c234736d9dde3b0fe66c6eaf9f411ad83c
 
           sed -i -e "/@storybook\/angular\": \"/d" ./package.json
           sed -i -e 's/"@electron\/rebuild": "[^"]*"/"@electron\/rebuild": "3.6.0"/' ./package.json
@@ -51,7 +49,7 @@ jobs:
 
       - name: Update Rust generated sources
         run: |
-          wget "https://github.com/bitwarden/clients/raw/cb1c35c234736d9dde3b0fe66c6eaf9f411ad83c/apps/desktop/desktop_native/Cargo.lock" -O Cargo.lock
+          wget "https://github.com/bitwarden/clients/raw/$BITWARDEN_DESKTOP_VERSION/apps/desktop/desktop_native/Cargo.lock" -O Cargo.lock
           python3 ${FLATPAK_BUILDER_TOOLS_DIR}/cargo/flatpak-cargo-generator.py Cargo.lock -o cargo-sources.json
           rm Cargo.lock
 
