@@ -63,7 +63,8 @@ modules:
         dest-filename: bitwarden.sh
         commands:
           - export TMPDIR="$XDG_RUNTIME_DIR/app/$FLATPAK_ID"
-          - exec zypak-wrapper /app/Bitwarden/bitwarden "--no-sandbox $@"
+          - ulimit -c 0
+          - exec zypak-wrapper /app/Bitwarden/bitwarden-app "$@"
       - type: file
         path: com.bitwarden.desktop.metainfo.xml
 
