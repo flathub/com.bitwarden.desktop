@@ -55,8 +55,11 @@
   <developer_name>Bitwarden Inc.</developer_name>
   <update_contact>hello@bitwarden.com</update_contact>
   <releases>
-    <release version="2024.12.0" date="2024-12-12">
+    <release version="2024.12.1" date="2024-12-17">
       <description></description>
+    </release>
+    <release version="2024.12.0" date="2024-12-12">
+      <description/>
     </release>
     <release version="2024.11.2" date="2024-11-21">
       <description/>
