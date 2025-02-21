@@ -21,7 +21,6 @@ finish-args:
   - --talk-name=org.gnome.ScreenSaver
   - --talk-name=org.freedesktop.ScreenSaver
   - --system-talk-name=org.freedesktop.login1
-  - --filesystem=xdg-download
 rename-desktop-file: bitwarden.desktop
 rename-icon: bitwarden
 modules:
