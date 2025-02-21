@@ -7,20 +7,29 @@ base-version: '24.08'
 command: bitwarden
 finish-args:
   - --share=ipc
+  # Used for X11 performance reasons
   - --share=network
   - --socket=x11
   - --device=dri
+  # GPU acceleration
   - --env=XDG_CURRENT_DESKTOP=Unity
+  # Do we need this?
   - --env=XCURSOR_PATH=/run/host/user-share/icons:/run/host/share/icons
+  # Proper cursors on Wayland
   - --talk-name=org.kde.StatusNotifierWatcher
-  - --talk-name=org.freedesktop.Notifications
-  - --talk-name=org.freedesktop.secrets
+  # Tray icon
   - --talk-name=com.canonical.AppMenu.Registrar
+  # Tray icon
+  - --talk-name=org.freedesktop.Notifications
+  # Notifications (may work with portals in certain DEs)
+  - --talk-name=org.freedesktop.secrets
+  # For encryption purposes (may work with portals in certain DEs)
   - --system-talk-name=org.freedesktop.PolicyKit1
-    # Lock on lockscreen
   - --talk-name=org.gnome.ScreenSaver
   - --talk-name=org.freedesktop.ScreenSaver
+  # Lock on lockscreen
   - --system-talk-name=org.freedesktop.login1
+  # Do we need this?
   - --filesystem=xdg-download
 rename-desktop-file: bitwarden.desktop
 rename-icon: bitwarden
