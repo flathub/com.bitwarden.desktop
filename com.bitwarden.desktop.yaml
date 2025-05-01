@@ -54,8 +54,8 @@ modules:
       - type: file
         only-arches:
           - x86_64
-        url: https://github.com/bitwarden/clients/releases/download/desktop-v2025.3.0/Bitwarden-2025.3.0-amd64.deb
-        sha256: f5a0bf53be3b345c1470ea088b90233fc24bae35ed58fe12c1e6ef1d88a8eb0e
+        url: https://github.com/bitwarden/clients/releases/download/desktop-v2025.4.2/Bitwarden-2025.4.2-amd64.deb
+        sha256: 70157811945ae3847d1a2b9a5f6424897ae22af6b0c91cf86c89a5d3dedd0584
         x-checker-data:
           type: anitya
           project-id: 179174
