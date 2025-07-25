@@ -54,8 +54,8 @@ modules:
       - type: file
         only-arches:
           - x86_64
-        url: https://github.com/bitwarden/clients/releases/download/desktop-v2025.6.1/Bitwarden-2025.6.1-amd64.deb
-        sha256: 38d7ca844ca2928873e9a10460f943b74ed52e2420052e651505bee9f21ded97
+        url: https://github.com/bitwarden/clients/releases/download/desktop-v2025.7.0/Bitwarden-2025.7.0-amd64.deb
+        sha256: f8bd7a3054303e7c60074ed15d593d78b22f177dbd0e7f98e820afe26b5fe4a8
         x-checker-data:
           type: anitya
           project-id: 179174
@@ -79,8 +79,8 @@ modules:
       - type: file
         only-arches:
           - x86_64
-        url: https://github.com/bitwarden/clients/releases/download/cli-v2025.6.1/bw-linux-2025.6.1.zip
-        sha256: 6bacf4151842ebcbfe6801770453a9302e8f658f7219d07e1313c007d8b80ac6
+        url: https://github.com/bitwarden/clients/releases/download/cli-v2025.7.0/bw-linux-2025.7.0.zip
+        sha256: b0bdaaa1f77d8dbf304e37403fa57a54aa1dafbe7c660d120ad67f286c174adf
         x-checker-data:
           type: anitya
           project-id: 229011
