@@ -57,8 +57,8 @@ modules:
       - type: file
         only-arches:
           - x86_64
-        url: https://github.com/bitwarden/clients/releases/download/desktop-v2025.11.0/Bitwarden-2025.11.0-amd64.deb
-        sha256: 33d4e72f7a56a9f8c0a30b115acc842783cb11ac0a23f1cc384a6a282d34eef9
+        url: https://github.com/bitwarden/clients/releases/download/desktop-v2025.11.1/Bitwarden-2025.11.1-amd64.deb
+        sha256: a37c12eaddbdaf87a96094eb5fe4f06fb6fc299cd67d593f56809582e3361943
         x-checker-data:
           type: anitya
           project-id: 179174
