@@ -217,4 +217,9 @@
     <release version="1.25.1" date="2021-03-18"/>
   </releases>
   <content_rating type="oars-1.1"/>
+  <keywords>
+    <keyword>password manager</keyword>
+    <keyword>secure password storage</keyword>
+    <keyword>password generator</keyword>
+  </keywords>
 </component>
