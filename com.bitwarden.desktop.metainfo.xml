@@ -51,7 +51,12 @@
   </screenshots>
   <url type="homepage">https://www.bitwarden.com/</url>
   <url type="bugtracker">https://github.com/bitwarden/clients/issues/</url>
+  <url type="faq">https://bitwarden.com/help/product-faqs/</url>
   <url type="help">https://bitwarden.com/help/</url>
+  <url type="translate">https://bitwarden.com/translate/</url>
+  <url type="contact">https://bitwarden.com/contact/</url>
+  <url type="vcs-browser">https://github.com/bitwarden/clients</url>
+  <url type="contribute">https://contributing.bitwarden.com/</url>
   <developer_name>Bitwarden Inc.</developer_name>
   <update_contact>hello@bitwarden.com</update_contact>
   <releases>
@@ -220,4 +225,9 @@
     <release version="1.25.1" date="2021-03-18"/>
   </releases>
   <content_rating type="oars-1.1"/>
+  <keywords>
+    <keyword>password manager</keyword>
+    <keyword>secure password storage</keyword>
+    <keyword>password generator</keyword>
+  </keywords>
 </component>
