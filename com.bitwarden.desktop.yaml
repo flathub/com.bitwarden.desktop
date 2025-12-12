@@ -69,6 +69,8 @@ modules:
         commands:
           - export TMPDIR="$XDG_RUNTIME_DIR/app/$FLATPAK_ID"
           - ulimit -c 0
+          - export ZYPAK_LD_PRELOAD="/app/bin/libprocess_isolation.so"
+          - export PROCESS_ISOLATION_LD_PRELOAD="/app/bin/libprocess_isolation.so"
           - exec zypak-wrapper /app/Bitwarden/bitwarden-app "$@"
       - type: file
         path: com.bitwarden.desktop.metainfo.xml
