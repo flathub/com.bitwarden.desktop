@@ -57,7 +57,9 @@
   <url type="contact">https://bitwarden.com/contact/</url>
   <url type="vcs-browser">https://github.com/bitwarden/clients</url>
   <url type="contribute">https://contributing.bitwarden.com/</url>
-  <developer_name>Bitwarden Inc.</developer_name>
+  <developer id="com.bitwarden">
+    <name>Bitwarden Inc.</name>
+  </developer>
   <update_contact>hello@bitwarden.com</update_contact>
   <releases>
     <release version="2025.12.0" date="2025-12-11">
