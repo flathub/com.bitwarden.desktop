@@ -78,15 +78,15 @@ modules:
   - name: bitwarden-cli
     buildsystem: simple
     build-commands:
-      - unzip bw-linux*.zip
+      - unzip bw-oss-linux*.zip
       - install -D -m 755 -t "${FLATPAK_DEST}/bin" bw
     sources:
       - type: file
         only-arches:
           - x86_64
-        url: https://github.com/bitwarden/clients/releases/download/cli-v2025.12.0/bw-linux-2025.12.0.zip
-        sha256: 0a5ea0c81aedae91f29a5a316d01c73af4a7275db4fad56d069eb90e28b1c55f
+        url: https://github.com/bitwarden/clients/releases/download/cli-v2025.12.0/bw-oss-linux-2025.12.0.zip
+        sha256: sha256:41b294121be7284d119f3ec905f163965b63dd328c9140b6304777e4f33364c0
         x-checker-data:
           type: anitya
           project-id: 229011
-          url-template: https://github.com/bitwarden/clients/releases/download/cli-v$version/bw-linux-$version.zip
+          url-template: https://github.com/bitwarden/clients/releases/download/cli-v$version/bw-oss-linux-$version.zip
