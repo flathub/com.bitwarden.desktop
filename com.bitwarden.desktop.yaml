@@ -85,7 +85,7 @@ modules:
         only-arches:
           - x86_64
         url: https://github.com/bitwarden/clients/releases/download/cli-v2025.12.0/bw-oss-linux-2025.12.0.zip
-        sha256: sha256:41b294121be7284d119f3ec905f163965b63dd328c9140b6304777e4f33364c0
+        sha256: 41b294121be7284d119f3ec905f163965b63dd328c9140b6304777e4f33364c0
         x-checker-data:
           type: anitya
           project-id: 229011
