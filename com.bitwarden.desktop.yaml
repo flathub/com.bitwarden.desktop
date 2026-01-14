@@ -30,55 +30,15 @@ finish-args:
 rename-desktop-file: bitwarden.desktop
 rename-icon: bitwarden
 modules:
-  # -------------------------
-  # Payload (x86_64): existing .deb extraction
-  # -------------------------
-  - name: bitwarden-desktop-payload-x86_64
-    only-arches: [x86_64]
-    buildsystem: simple
-    build-commands:
-      - ar -x Bitwarden*.deb
-      - rm -f Bitwarden*.deb
-      - tar -xf data.tar.xz
-      - rm -f control.tar.gz data.tar.xz debian-binary
-      - cp -r opt/* usr/* $FLATPAK_DEST
-      - rm -rf opt usr
-    sources:
-      - type: file
-        url: https://github.com/bitwarden/clients/releases/download/desktop-v2025.12.1/Bitwarden-2025.12.1-amd64.deb
-        sha256: 33a5056f43b6205fe168f64f3fc7d52cef4c5ccbe06951584d037664aa3c6c50
-        x-checker-data:
-          type: anitya
-          project-id: 179174
-          url-template: https://github.com/bitwarden/clients/releases/download/desktop-v$version/Bitwarden-$version-amd64.deb
-          is-main-source: true
-
-  # -------------------------
-  # Payload (aarch64): unpack Bitwarden arm64 tar.gz into $FLATPAK_DEST/Bitwarden
-  # -------------------------
-  - name: bitwarden-desktop-payload-aarch64
-    only-arches: [aarch64]
+  - name: bitwarden-desktop
     buildsystem: simple
     build-commands:
       - install -d $FLATPAK_DEST/Bitwarden
-      - tar -xzf bitwarden_arm64.tar.gz -C $FLATPAK_DEST/Bitwarden --strip-components=1
-    sources:
-      - type: file
-        dest-filename: bitwarden_arm64.tar.gz
-        url: https://github.com/bitwarden/clients/releases/download/desktop-v2025.12.1/bitwarden_2025.12.1_arm64.tar.gz
-        sha256: b9e180eaf141362e398629ced45bdd89eee22a0f2defb79fa9e1f1324498f2de
-
-  # -------------------------
-  # Common bits: launcher, metainfo, desktop tweaks, locale splitting
-  # -------------------------
-  - name: bitwarden-desktop-common
-    buildsystem: simple
-    build-commands:
+      - tar -xzf bitwarden.tar.gz -C $FLATPAK_DEST/Bitwarden --strip-components=1
       - install bitwarden.sh $FLATPAK_DEST/bin/bitwarden
       - install -D -m 644 -t $FLATPAK_DEST/share/metainfo $FLATPAK_ID.metainfo.xml
       - install -D -m 644 com.bitwarden.desktop.desktop $FLATPAK_DEST/share/applications/bitwarden.desktop
       - install -D -m 644 com.bitwarden.desktop.svg $FLATPAK_DEST/share/icons/hicolor/scalable/apps/bitwarden.svg
-      - rm -rf "${FLATPAK_DEST}/share/icons/hicolor/1024x1024/"
       - |
         if [ -d "${FLATPAK_DEST}/Bitwarden/locales" ]; then
           for lang in ${FLATPAK_DEST}/Bitwarden/locales/*.pak; do
@@ -90,11 +50,31 @@ modules:
           done
         fi
 
+
     sources:
       - type: file
+        only-arches: [x86_64]
+        dest-filename: bitwarden.tar.gz
+        url: https://github.com/bitwarden/clients/releases/download/desktop-v2025.12.1/bitwarden_2025.12.1_x64.tar.gz
+        sha256: f63b6afdf3931b844da7cc9f3cb09b666a0e44f853ab27424c2b21c27f4de80b
+        x-checker-data:
+          type: anitya
+          project-id: 179174
+          url-template: https://github.com/bitwarden/clients/releases/download/desktop-v$version/Bitwarden-$version-amd64.deb
+          is-main-source: true
+
+      - type: file
+        only-arches: [aarch64]
+        dest-filename: bitwarden.tar.gz
+        url: https://github.com/bitwarden/clients/releases/download/desktop-v2025.12.1/bitwarden_2025.12.1_arm64.tar.gz
+        sha256: b9e180eaf141362e398629ced45bdd89eee22a0f2defb79fa9e1f1324498f2de
+
+      - type: file
         path: resources/com.bitwarden.desktop.desktop
+
       - type: file
         path: resources/com.bitwarden.desktop.svg
+
       - type: script
         dest-filename: bitwarden.sh
         commands:
@@ -103,6 +83,7 @@ modules:
           - export ZYPAK_LD_PRELOAD="/app/bin/libprocess_isolation.so"
           - export PROCESS_ISOLATION_LD_PRELOAD="/app/bin/libprocess_isolation.so"
           - exec zypak-wrapper /app/Bitwarden/bitwarden-app "$@"
+
       - type: file
         path: com.bitwarden.desktop.metainfo.xml
 
