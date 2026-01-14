@@ -45,8 +45,8 @@ modules:
       - rm -rf opt usr
     sources:
       - type: file
-        url: https://github.com/bitwarden/clients/releases/download/desktop-v2025.12.0/Bitwarden-2025.12.0-amd64.deb
-        sha256: daa250c949da78a68abac30072aa72eaa5a26fef6e5a55f84a88ff282bfcb418
+        url: https://github.com/bitwarden/clients/releases/download/desktop-v2025.12.1/Bitwarden-2025.12.1-amd64.deb
+        sha256: 33a5056f43b6205fe168f64f3fc7d52cef4c5ccbe06951584d037664aa3c6c50
         x-checker-data:
           type: anitya
           project-id: 179174
@@ -61,10 +61,8 @@ modules:
     buildsystem: simple
     build-commands:
       - install -d $FLATPAK_DEST/Bitwarden
-      # Most Bitwarden tarballs contain a single top-level directory; strip-components=1 matches what you did locally.
       - tar -xzf bitwarden_arm64.tar.gz -C $FLATPAK_DEST/Bitwarden --strip-components=1
     sources:
-      # Bitwarden publishes this as bitwarden_2025.12.0_arm64.tar.gz in the desktop assets listing. :contentReference[oaicite:1]{index=1}
       - type: file
         dest-filename: bitwarden_arm64.tar.gz
         url: https://github.com/bitwarden/clients/releases/download/desktop-v2025.12.1/bitwarden_2025.12.1_arm64.tar.gz
@@ -78,16 +76,9 @@ modules:
     build-commands:
       - install bitwarden.sh $FLATPAK_DEST/bin/bitwarden
       - install -D -m 644 -t $FLATPAK_DEST/share/metainfo $FLATPAK_ID.metainfo.xml
-      - echo $FLATPAK_DEST
-
       - install -D -m 644 com.bitwarden.desktop.desktop $FLATPAK_DEST/share/applications/bitwarden.desktop
-
       - install -D -m 644 com.bitwarden.desktop.svg $FLATPAK_DEST/share/icons/hicolor/scalable/apps/bitwarden.svg
-
-      # Clean up huge icon (same as upstream)
       - rm -rf "${FLATPAK_DEST}/share/icons/hicolor/1024x1024/"
-
-      # To allow separate locales (same logic you already had)
       - |
         if [ -d "${FLATPAK_DEST}/Bitwarden/locales" ]; then
           for lang in ${FLATPAK_DEST}/Bitwarden/locales/*.pak; do
