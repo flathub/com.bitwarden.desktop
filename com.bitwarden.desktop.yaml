@@ -30,7 +30,11 @@ finish-args:
 rename-desktop-file: bitwarden.desktop
 rename-icon: bitwarden
 modules:
-  - name: bitwarden-desktop
+  # -------------------------
+  # Payload (x86_64): existing .deb extraction
+  # -------------------------
+  - name: bitwarden-desktop-payload-x86_64
+    only-arches: [x86_64]
     buildsystem: simple
     build-commands:
       - ar -x Bitwarden*.deb
@@ -39,24 +43,8 @@ modules:
       - rm -f control.tar.gz data.tar.xz debian-binary
       - cp -r opt/* usr/* $FLATPAK_DEST
       - rm -rf opt usr
-      - install bitwarden.sh $FLATPAK_DEST/bin/bitwarden
-      - install -D -m 644 -t $FLATPAK_DEST/share/metainfo $FLATPAK_ID.metainfo.xml
-      - desktop-file-edit --set-key=Exec --set-value="bitwarden %U" $FLATPAK_DEST/share/applications/bitwarden.desktop
-      - rm -rf "${FLATPAK_DEST}/share/icons/hicolor/1024x1024/"
-
-      # To allow separate locales
-      # https://searchfox.org/mozilla-central/rev/8a4f55bc09ffc5c25dcb4586c51ae4a9fee77b4c/taskcluster/docker/firefox-flatpak/runme.sh#131-133
-      - |
-        for lang in ${FLATPAK_DEST}/Bitwarden/locales/*.pak
-        do
-          locale="$(basename -s .pak $lang)"
-          install -Dm644 -t "${FLATPAK_DEST}/share/runtime/locale/${locale%%-*}/" "$lang"
-          ln -sf "${FLATPAK_DEST}/share/runtime/locale/${locale%%-*}/$(basename $lang)" "${FLATPAK_DEST}/Bitwarden/locales/$(basename $lang)"
-        done
     sources:
       - type: file
-        only-arches:
-          - x86_64
         url: https://github.com/bitwarden/clients/releases/download/desktop-v2025.12.0/Bitwarden-2025.12.0-amd64.deb
         sha256: daa250c949da78a68abac30072aa72eaa5a26fef6e5a55f84a88ff282bfcb418
         x-checker-data:
@@ -64,6 +52,58 @@ modules:
           project-id: 179174
           url-template: https://github.com/bitwarden/clients/releases/download/desktop-v$version/Bitwarden-$version-amd64.deb
           is-main-source: true
+
+  # -------------------------
+  # Payload (aarch64): unpack Bitwarden arm64 tar.gz into $FLATPAK_DEST/Bitwarden
+  # -------------------------
+  - name: bitwarden-desktop-payload-aarch64
+    only-arches: [aarch64]
+    buildsystem: simple
+    build-commands:
+      - install -d $FLATPAK_DEST/Bitwarden
+      # Most Bitwarden tarballs contain a single top-level directory; strip-components=1 matches what you did locally.
+      - tar -xzf bitwarden_arm64.tar.gz -C $FLATPAK_DEST/Bitwarden --strip-components=1
+    sources:
+      # Bitwarden publishes this as bitwarden_2025.12.0_arm64.tar.gz in the desktop assets listing. :contentReference[oaicite:1]{index=1}
+      - type: file
+        dest-filename: bitwarden_arm64.tar.gz
+        url: https://github.com/bitwarden/clients/releases/download/desktop-v2025.12.1/bitwarden_2025.12.1_arm64.tar.gz
+        sha256: b9e180eaf141362e398629ced45bdd89eee22a0f2defb79fa9e1f1324498f2de
+
+  # -------------------------
+  # Common bits: launcher, metainfo, desktop tweaks, locale splitting
+  # -------------------------
+  - name: bitwarden-desktop-common
+    buildsystem: simple
+    build-commands:
+      - install bitwarden.sh $FLATPAK_DEST/bin/bitwarden
+      - install -D -m 644 -t $FLATPAK_DEST/share/metainfo $FLATPAK_ID.metainfo.xml
+      - echo $FLATPAK_DEST
+
+      - install -D -m 644 com.bitwarden.desktop.desktop $FLATPAK_DEST/share/applications/bitwarden.desktop
+
+      - install -D -m 644 com.bitwarden.desktop.svg $FLATPAK_DEST/share/icons/hicolor/scalable/apps/bitwarden.svg
+
+      # Clean up huge icon (same as upstream)
+      - rm -rf "${FLATPAK_DEST}/share/icons/hicolor/1024x1024/"
+
+      # To allow separate locales (same logic you already had)
+      - |
+        if [ -d "${FLATPAK_DEST}/Bitwarden/locales" ]; then
+          for lang in ${FLATPAK_DEST}/Bitwarden/locales/*.pak; do
+            [ -e "$lang" ] || continue
+            locale="$(basename -s .pak "$lang")"
+            install -Dm644 -t "${FLATPAK_DEST}/share/runtime/locale/${locale%%-*}/" "$lang"
+            ln -sf "${FLATPAK_DEST}/share/runtime/locale/${locale%%-*}/$(basename "$lang")" \
+              "${FLATPAK_DEST}/Bitwarden/locales/$(basename "$lang")"
+          done
+        fi
+
+    sources:
+      - type: file
+        path: resources/com.bitwarden.desktop.desktop
+      - type: file
+        path: resources/com.bitwarden.desktop.svg
       - type: script
         dest-filename: bitwarden.sh
         commands:
@@ -75,8 +115,12 @@ modules:
       - type: file
         path: com.bitwarden.desktop.metainfo.xml
 
+  # -------------------------
+  # CLI (leave as-is; x86_64 only in upstream manifest)
+  # -------------------------
   - name: bitwarden-cli
     buildsystem: simple
+    only-arches: [x86_64]
     build-commands:
       - unzip bw-oss-linux*.zip
       - install -D -m 755 -t "${FLATPAK_DEST}/bin" bw
@@ -90,3 +134,4 @@ modules:
           type: anitya
           project-id: 229011
           url-template: https://github.com/bitwarden/clients/releases/download/cli-v$version/bw-oss-linux-$version.zip
+
