@@ -33,37 +33,49 @@ modules:
   - name: bitwarden-desktop
     buildsystem: simple
     build-commands:
-      - ar -x Bitwarden*.deb
-      - rm -f Bitwarden*.deb
-      - tar -xf data.tar.xz
-      - rm -f control.tar.gz data.tar.xz debian-binary
-      - cp -r opt/* usr/* $FLATPAK_DEST
-      - rm -rf opt usr
-      - install bitwarden.sh $FLATPAK_DEST/bin/bitwarden
-      - install -D -m 644 -t $FLATPAK_DEST/share/metainfo $FLATPAK_ID.metainfo.xml
-      - desktop-file-edit --set-key=Exec --set-value="bitwarden %U" $FLATPAK_DEST/share/applications/bitwarden.desktop
-      - rm -rf "${FLATPAK_DEST}/share/icons/hicolor/1024x1024/"
-
+      - mkdir -p "$FLATPAK_DEST/Bitwarden"
+      - tar -xzf bitwarden.tar.gz -C "${FLATPAK_DEST}/Bitwarden"
+      - install -D bitwarden.sh "${FLATPAK_DEST}/bin/bitwarden"
+      - install -D -m 644 "${FLATPAK_ID}.metainfo.xml" -t "${FLATPAK_DEST}/share/metainfo"
+      - install -D -m 644 "${FLATPAK_DEST}/Bitwarden/resources/com.bitwarden.desktop.desktop" "${FLATPAK_DEST}/share/applications/bitwarden.desktop"
+      - desktop-file-edit --set-key=Exec --set-value="bitwarden %U" "${FLATPAK_DEST}/share/applications/bitwarden.desktop"
+      - |
+        for icon in "${FLATPAK_DEST}"/Bitwarden/resources/icons/*.png; do
+          size="$(basename -s .png ${icon})"
+          if [ "${size}" == '1024x1024' ]; then continue; fi
+          install -D -m 644 "${icon}" "${FLATPAK_DEST}/share/icons/hicolor/${size}/apps/bitwarden.png"
+        done
+    
       # To allow separate locales
       # https://searchfox.org/mozilla-central/rev/8a4f55bc09ffc5c25dcb4586c51ae4a9fee77b4c/taskcluster/docker/firefox-flatpak/runme.sh#131-133
       - |
-        for lang in ${FLATPAK_DEST}/Bitwarden/locales/*.pak
-        do
-          locale="$(basename -s .pak $lang)"
-          install -Dm644 -t "${FLATPAK_DEST}/share/runtime/locale/${locale%%-*}/" "$lang"
-          ln -sf "${FLATPAK_DEST}/share/runtime/locale/${locale%%-*}/$(basename $lang)" "${FLATPAK_DEST}/Bitwarden/locales/$(basename $lang)"
+        for lang in "${FLATPAK_DEST}"/Bitwarden/locales/*.pak; do
+          locale="$(basename -s .pak ${lang})"
+          install -D -m 644 "${lang}" -t "${FLATPAK_DEST}/share/runtime/locale/${locale%%-*}/"
+          ln -sf "${FLATPAK_DEST}/share/runtime/locale/${locale%%-*}/$(basename ${lang})" "${FLATPAK_DEST}/Bitwarden/locales/$(basename ${lang})"
         done
     sources:
       - type: file
+        dest-filename: bitwarden.tar.gz
         only-arches:
           - x86_64
-        url: https://github.com/bitwarden/clients/releases/download/desktop-v2026.1.0/Bitwarden-2026.1.0-amd64.deb
-        sha256: 6db36b2ed691901483a1c2355bdef5ca102a1f53a26cf4be2173b9e1a4b252e5
+        url: https://github.com/bitwarden/clients/releases/download/desktop-v2026.1.0/bitwarden_2026.1.0_x64.tar.gz
+        sha256: be2d582eda7837ecadd5aad4dbb5de325d217a7c40c1a49d865f94de91aaf221
         x-checker-data:
           type: anitya
           project-id: 179174
-          url-template: https://github.com/bitwarden/clients/releases/download/desktop-v$version/Bitwarden-$version-amd64.deb
+          url-template: https://github.com/bitwarden/clients/releases/download/desktop-v$version/bitwarden_$version_x64.tar.gz
           is-main-source: true
+      - type: file
+        dest-filename: bitwarden.tar.gz
+        only-arches:
+          - aarch64
+        url: https://github.com/bitwarden/clients/releases/download/desktop-v2026.1.0/bitwarden_2026.1.0_arm64.tar.gz
+        sha256: fbc37d49a40a7302731476d98730557ad7e54f1bd1bcfca85b77e3ae1de2febf
+        x-checker-data:
+          type: anitya
+          project-id: 179174
+          url-template: https://github.com/bitwarden/clients/releases/download/desktop-v$version/bitwarden_$version_arm64.tar.gz
       - type: script
         dest-filename: bitwarden.sh
         commands:
