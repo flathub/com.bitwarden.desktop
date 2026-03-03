@@ -93,6 +93,8 @@ modules:
 
   - name: bitwarden-cli
     buildsystem: simple
+    only-arches:
+      - x86_64
     build-commands:
       - unzip bw-oss-linux*.zip
       - install -D -m 755 -t "${FLATPAK_DEST}/bin" bw
