@@ -37,7 +37,8 @@ modules:
       - tar -xzf bitwarden.tar.gz -C "${FLATPAK_DEST}/Bitwarden"
       - install -D bitwarden.sh "${FLATPAK_DEST}/bin/bitwarden"
       - install -D -m 644 "${FLATPAK_ID}.metainfo.xml" -t "${FLATPAK_DEST}/share/metainfo"
-      - install -D -m 644 "${FLATPAK_DEST}/Bitwarden/resources/com.bitwarden.desktop.desktop" "${FLATPAK_DEST}/share/applications/bitwarden.desktop"
+      - install -D -m 644 "${FLATPAK_DEST}/Bitwarden/resources/com.bitwarden.desktop.desktop"
+        "${FLATPAK_DEST}/share/applications/bitwarden.desktop"
       - desktop-file-edit --set-key=Exec --set-value="bitwarden %U" "${FLATPAK_DEST}/share/applications/bitwarden.desktop"
       - |
         for icon in "${FLATPAK_DEST}"/Bitwarden/resources/icons/*.png; do
@@ -45,7 +46,7 @@ modules:
           if [ "${size}" == '1024x1024' ]; then continue; fi
           install -D -m 644 "${icon}" "${FLATPAK_DEST}/share/icons/hicolor/${size}/apps/bitwarden.png"
         done
-    
+
       # To allow separate locales
       # https://searchfox.org/mozilla-central/rev/8a4f55bc09ffc5c25dcb4586c51ae4a9fee77b4c/taskcluster/docker/firefox-flatpak/runme.sh#131-133
       - |
@@ -102,8 +103,8 @@ modules:
       - type: file
         only-arches:
           - x86_64
-        url: https://github.com/bitwarden/clients/releases/download/cli-v2026.1.0/bw-oss-linux-2026.1.0.zip
-        sha256: f5151ba8f415d717403e5371a7ab0dbb3ee88bdd5d4fe0103fe3e31410171ba5
+        url: https://github.com/bitwarden/clients/releases/download/cli-v2026.2.0/bw-oss-linux-2026.2.0.zip
+        sha256: 41d254d428c3226ecfefe5d49132ed869758507fa9c9c4123ccea011fdb875bc
         x-checker-data:
           type: anitya
           project-id: 229011
