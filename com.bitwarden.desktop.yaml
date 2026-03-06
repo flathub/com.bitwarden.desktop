@@ -65,7 +65,7 @@ modules:
         x-checker-data:
           type: anitya
           project-id: 179174
-          url-template: https://github.com/bitwarden/clients/releases/download/desktop-v$version/bitwarden_$version_x64.tar.gz
+          url-template: https://github.com/bitwarden/clients/releases/download/desktop-v$version/bitwarden_${version}_x64.tar.gz
           is-main-source: true
       - type: file
         dest-filename: bitwarden.tar.gz
@@ -76,7 +76,7 @@ modules:
         x-checker-data:
           type: anitya
           project-id: 179174
-          url-template: https://github.com/bitwarden/clients/releases/download/desktop-v$version/bitwarden_$version_arm64.tar.gz
+          url-template: https://github.com/bitwarden/clients/releases/download/desktop-v$version/bitwarden_${version}_arm64.tar.gz
       - type: script
         dest-filename: bitwarden.sh
         commands:
