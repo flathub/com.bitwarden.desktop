@@ -60,8 +60,8 @@ modules:
         dest-filename: bitwarden.tar.gz
         only-arches:
           - x86_64
-        url: https://github.com/bitwarden/clients/releases/download/desktop-v2026.2.1/bitwarden_2026.2.1_x64.tar.gz
-        sha256: 650478132e5526f8c33997f4ecf3f45d650c4e71326d2afdc112f3ca89902717
+        url: https://github.com/bitwarden/clients/releases/download/desktop-v2026.3.1/bitwarden_2026.3.1_x64.tar.gz
+        sha256: 3558e24b829d90c7bb73ce22962f6fac1a9483b6052c1ed3075663413ec6efab
         x-checker-data:
           type: anitya
           project-id: 179174
@@ -71,8 +71,8 @@ modules:
         dest-filename: bitwarden.tar.gz
         only-arches:
           - aarch64
-        url: https://github.com/bitwarden/clients/releases/download/desktop-v2026.2.1/bitwarden_2026.2.1_arm64.tar.gz
-        sha256: c3b72abb7f33b045a4e8b11f40d4608930706ea24bf9b47142d27e3ec05ffb02
+        url: https://github.com/bitwarden/clients/releases/download/desktop-v2026.3.1/bitwarden_2026.3.1_arm64.tar.gz
+        sha256: d0ad123773c8816f1125f0fd15b43c6732ad0d04c873b7d69e3f9bdcfcfc7ecc
         x-checker-data:
           type: anitya
           project-id: 179174
@@ -103,8 +103,8 @@ modules:
       - type: file
         only-arches:
           - x86_64
-        url: https://github.com/bitwarden/clients/releases/download/cli-v2026.2.0/bw-oss-linux-2026.2.0.zip
-        sha256: 41d254d428c3226ecfefe5d49132ed869758507fa9c9c4123ccea011fdb875bc
+        url: https://github.com/bitwarden/clients/releases/download/cli-v2026.3.0/bw-oss-linux-2026.3.0.zip
+        sha256: 640d928bef91b2b81aa021777995230681204f5582315ef943ba72db2cbd283d
         x-checker-data:
           type: anitya
           project-id: 229011
