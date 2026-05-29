@@ -60,8 +60,8 @@ modules:
         dest-filename: bitwarden.tar.gz
         only-arches:
           - x86_64
-        url: https://github.com/bitwarden/clients/releases/download/desktop-v2026.4.0/bitwarden_2026.4.0_x64.tar.gz
-        sha256: 51c6f43b5f8fa57cca95296898e3ebe458cc7070dd7158e1216bade520d83682
+        url: https://github.com/bitwarden/clients/releases/download/desktop-v2026.5.0/bitwarden_2026.5.0_x64.tar.gz
+        sha256: d95a0ca42d87f51ad67982471d8bf85802ca2d20cd4e3ed639257e1a6414ba86
         x-checker-data:
           type: anitya
           project-id: 179174
@@ -71,8 +71,8 @@ modules:
         dest-filename: bitwarden.tar.gz
         only-arches:
           - aarch64
-        url: https://github.com/bitwarden/clients/releases/download/desktop-v2026.4.0/bitwarden_2026.4.0_arm64.tar.gz
-        sha256: 36358ee8789841dfc6efeec875e7b7c6108bbb04a4cd117f3b45afb126cd01c2
+        url: https://github.com/bitwarden/clients/releases/download/desktop-v2026.5.0/bitwarden_2026.5.0_arm64.tar.gz
+        sha256: 31032ba5b1371a30b844c48cb7b07fcba8e56aad0c2b256aaabe14d9e4eabc6d
         x-checker-data:
           type: anitya
           project-id: 179174
