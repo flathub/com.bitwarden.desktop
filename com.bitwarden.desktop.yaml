@@ -27,6 +27,22 @@ finish-args:
   - --filesystem=xdg-download
   # Fido2 USB security keys
   - --device=all
+  
+  # Browser integration
+  # The config directory is needed to write manifests for non-flatpak
+  # Sockets are mounted in each app's directory
+  #
+  # Non-sandboxed
+  - --filesystem=xdg-config/google-chrome/NativeMessagingHosts/
+  - --filesystem=xdg-config/chromium/NativeMessagingHosts/
+  - --filesystem=xdg-config/microsoft-edge/NativeMessagingHosts/
+  - --filesystem=home/.mozilla
+  # Flatpak-sandboxed
+  - --filesystem=~/.var/app/org.chromium.Chromium/config/chromium/NativeMessagingHosts/
+  - --filesystem=~/.var/app/com.google.Chrome/config/google-chrome/NativeMessagingHosts/
+  - --filesystem=~/.var/app/com.microsoft.Edge/config/microsoft-edge/NativeMessagingHosts/
+  # Firefox does not create NMHS directory by default
+  - --filesystem=~/.var/app/org.mozilla.firefox/.mozilla/
 rename-desktop-file: bitwarden.desktop
 rename-icon: bitwarden
 modules:
