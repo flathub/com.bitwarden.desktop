@@ -27,7 +27,7 @@ finish-args:
   - --filesystem=xdg-download
   # Fido2 USB security keys
   - --device=all
-  
+
   # Browser integration
   # The config directory is needed to write manifests for non-flatpak
   # Sockets are mounted in each app's directory
@@ -76,8 +76,8 @@ modules:
         dest-filename: bitwarden.tar.gz
         only-arches:
           - x86_64
-        url: https://github.com/bitwarden/clients/releases/download/desktop-v2026.5.0/bitwarden_2026.5.0_x64.tar.gz
-        sha256: d95a0ca42d87f51ad67982471d8bf85802ca2d20cd4e3ed639257e1a6414ba86
+        url: https://github.com/bitwarden/clients/releases/download/desktop-v2026.6.0/bitwarden_2026.6.0_x64.tar.gz
+        sha256: d3ca25a1b9111f6170307c538c901aa8c8e76dda72a5ed91f75faa521fa5e44c
         x-checker-data:
           type: anitya
           project-id: 179174
@@ -87,8 +87,8 @@ modules:
         dest-filename: bitwarden.tar.gz
         only-arches:
           - aarch64
-        url: https://github.com/bitwarden/clients/releases/download/desktop-v2026.5.0/bitwarden_2026.5.0_arm64.tar.gz
-        sha256: 31032ba5b1371a30b844c48cb7b07fcba8e56aad0c2b256aaabe14d9e4eabc6d
+        url: https://github.com/bitwarden/clients/releases/download/desktop-v2026.6.0/bitwarden_2026.6.0_arm64.tar.gz
+        sha256: 65fedee7eae958b496ff032450ffd845be755a3320fea1fdf03cab635022b63e
         x-checker-data:
           type: anitya
           project-id: 179174
@@ -119,8 +119,8 @@ modules:
       - type: file
         only-arches:
           - x86_64
-        url: https://github.com/bitwarden/clients/releases/download/cli-v2026.5.0/bw-oss-linux-2026.5.0.zip
-        sha256: f233e8fe83a49b73cd4b8de620190e5e76544793a32871e151b2238a59b7ec4e
+        url: https://github.com/bitwarden/clients/releases/download/cli-v2026.6.0/bw-oss-linux-2026.6.0.zip
+        sha256: e2bfcc307147487582e50b2e8bc8ede0982da4499fe727396a08188365c69637
         x-checker-data:
           type: anitya
           project-id: 229011
