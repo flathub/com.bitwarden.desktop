@@ -33,9 +33,11 @@ finish-args:
   # Sockets are mounted in each app's directory
   #
   # Non-sandboxed
+  - --filesystem=xdg-config/BraveSoftware/Brave-Browser/NativeMessagingHosts/
   - --filesystem=xdg-config/google-chrome/NativeMessagingHosts/
   - --filesystem=xdg-config/chromium/NativeMessagingHosts/
   - --filesystem=xdg-config/microsoft-edge/NativeMessagingHosts/
+  - --filesystem=xdg-config/vivaldi/NativeMessagingHosts/
   - --filesystem=home/.mozilla
   # Flatpak-sandboxed
   - --filesystem=~/.var/app/org.chromium.Chromium/config/chromium/NativeMessagingHosts/
