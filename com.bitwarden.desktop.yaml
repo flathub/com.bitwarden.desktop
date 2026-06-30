@@ -62,6 +62,7 @@ modules:
           if [ "${size}" == '1024x1024' ]; then continue; fi
           install -D -m 644 "${icon}" "${FLATPAK_DEST}/share/icons/hicolor/${size}/apps/bitwarden.png"
         done
+      - install -D libprocess_isolation.so "${FLATPAK_DEST}/libprocess_isolation.so"
 
       # To allow separate locales
       # https://searchfox.org/mozilla-central/rev/8a4f55bc09ffc5c25dcb4586c51ae4a9fee77b4c/taskcluster/docker/firefox-flatpak/runme.sh#131-133
