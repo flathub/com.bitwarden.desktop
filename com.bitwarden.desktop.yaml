@@ -4,7 +4,7 @@ runtime-version: '25.08'
 sdk: org.freedesktop.Sdk
 base: org.electronjs.Electron2.BaseApp
 base-version: '25.08'
-command: bitwarden
+command: bitwarden.sh
 finish-args:
   - --share=ipc
   - --share=network
@@ -51,11 +51,11 @@ modules:
     build-commands:
       - mkdir -p "$FLATPAK_DEST/Bitwarden"
       - tar -xzf bitwarden.tar.gz -C "${FLATPAK_DEST}/Bitwarden"
-      - install -D bitwarden.sh "${FLATPAK_DEST}/bin/bitwarden"
+      - install -D bitwarden.sh "${FLATPAK_DEST}/bin/bitwarden.sh"
       - install -D -m 644 "${FLATPAK_ID}.metainfo.xml" -t "${FLATPAK_DEST}/share/metainfo"
       - install -D -m 644 "${FLATPAK_DEST}/Bitwarden/resources/com.bitwarden.desktop.desktop"
         "${FLATPAK_DEST}/share/applications/bitwarden.desktop"
-      - desktop-file-edit --set-key=Exec --set-value="bitwarden %U" "${FLATPAK_DEST}/share/applications/bitwarden.desktop"
+      - desktop-file-edit --set-key=Exec --set-value="bitwarden.sh %U" "${FLATPAK_DEST}/share/applications/bitwarden.desktop"
       - |
         for icon in "${FLATPAK_DEST}"/Bitwarden/resources/icons/*.png; do
           size="$(basename -s .png ${icon})"
@@ -93,18 +93,8 @@ modules:
           type: anitya
           project-id: 179174
           url-template: https://github.com/bitwarden/clients/releases/download/desktop-v$version/bitwarden_${version}_arm64.tar.gz
-      - type: script
-        dest-filename: bitwarden.sh
-        commands:
-          - export TMPDIR="$XDG_RUNTIME_DIR/app/$FLATPAK_ID"
-          - ulimit -c 0
-          - export ZYPAK_LD_PRELOAD="/app/bin/libprocess_isolation.so"
-          - export PROCESS_ISOLATION_LD_PRELOAD="/app/bin/libprocess_isolation.so"
-          # Electron 39 has a bug around wayland support, thus we go back to defaulting to X11, while required
-          - if [ "$USE_X11" != "false" ]; then
-          - PARAMS="--ozone-platform=x11"
-          - fi
-          - exec zypak-wrapper /app/Bitwarden/bitwarden-app "$@" "$PARAMS"
+      - type: file
+        path: bitwarden.sh
       - type: file
         path: com.bitwarden.desktop.metainfo.xml
 
