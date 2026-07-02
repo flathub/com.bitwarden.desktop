@@ -4,7 +4,7 @@ runtime-version: '25.08'
 sdk: org.freedesktop.Sdk
 base: org.electronjs.Electron2.BaseApp
 base-version: '25.08'
-command: bitwarden
+command: bitwarden.sh
 finish-args:
   - --share=ipc
   - --share=network
@@ -26,7 +26,7 @@ finish-args:
   - --filesystem=xdg-download
   # Fido2 USB security keys
   - --device=all
-  
+
   # Browser integration
   # The config directory is needed to write manifests for non-flatpak
   # Sockets are mounted in each app's directory
@@ -50,11 +50,11 @@ modules:
     build-commands:
       - mkdir -p "$FLATPAK_DEST/Bitwarden"
       - tar -xzf bitwarden.tar.gz -C "${FLATPAK_DEST}/Bitwarden"
-      - install -D bitwarden.sh "${FLATPAK_DEST}/bin/bitwarden"
+      - install -D bitwarden.sh "${FLATPAK_DEST}/bin/bitwarden.sh"
       - install -D -m 644 "${FLATPAK_ID}.metainfo.xml" -t "${FLATPAK_DEST}/share/metainfo"
       - install -D -m 644 "${FLATPAK_DEST}/Bitwarden/resources/com.bitwarden.desktop.desktop"
         "${FLATPAK_DEST}/share/applications/bitwarden.desktop"
-      - desktop-file-edit --set-key=Exec --set-value="bitwarden %U" "${FLATPAK_DEST}/share/applications/bitwarden.desktop"
+      - desktop-file-edit --set-key=Exec --set-value="bitwarden.sh %U" "${FLATPAK_DEST}/share/applications/bitwarden.desktop"
       - |
         for icon in "${FLATPAK_DEST}"/Bitwarden/resources/icons/*.png; do
           size="$(basename -s .png ${icon})"
@@ -75,8 +75,8 @@ modules:
         dest-filename: bitwarden.tar.gz
         only-arches:
           - x86_64
-        url: https://github.com/bitwarden/clients/releases/download/desktop-v2026.5.0/bitwarden_2026.5.0_x64.tar.gz
-        sha256: d95a0ca42d87f51ad67982471d8bf85802ca2d20cd4e3ed639257e1a6414ba86
+        url: https://github.com/bitwarden/clients/releases/download/desktop-v2026.6.1/bitwarden_2026.6.1_x64.tar.gz
+        sha256: 2656114a4e960a815bad4bd695a740b12b3ef0f52321187c15c864a15aafbd5c
         x-checker-data:
           type: anitya
           project-id: 179174
@@ -86,24 +86,14 @@ modules:
         dest-filename: bitwarden.tar.gz
         only-arches:
           - aarch64
-        url: https://github.com/bitwarden/clients/releases/download/desktop-v2026.5.0/bitwarden_2026.5.0_arm64.tar.gz
-        sha256: 31032ba5b1371a30b844c48cb7b07fcba8e56aad0c2b256aaabe14d9e4eabc6d
+        url: https://github.com/bitwarden/clients/releases/download/desktop-v2026.6.1/bitwarden_2026.6.1_arm64.tar.gz
+        sha256: c35c70d215736947ff043c00d99b7ee3de6212d1684356e8d680af618b7bf6c6
         x-checker-data:
           type: anitya
           project-id: 179174
           url-template: https://github.com/bitwarden/clients/releases/download/desktop-v$version/bitwarden_${version}_arm64.tar.gz
-      - type: script
-        dest-filename: bitwarden.sh
-        commands:
-          - export TMPDIR="$XDG_RUNTIME_DIR/app/$FLATPAK_ID"
-          - ulimit -c 0
-          - export ZYPAK_LD_PRELOAD="/app/bin/libprocess_isolation.so"
-          - export PROCESS_ISOLATION_LD_PRELOAD="/app/bin/libprocess_isolation.so"
-          # Electron 39 has a bug around wayland support, thus we go back to defaulting to X11, while required
-          - if [ "$USE_X11" != "false" ]; then
-          - PARAMS="--ozone-platform=x11"
-          - fi
-          - exec zypak-wrapper /app/Bitwarden/bitwarden-app "$@" "$PARAMS"
+      - type: file
+        path: bitwarden.sh
       - type: file
         path: com.bitwarden.desktop.metainfo.xml
 
@@ -118,8 +108,8 @@ modules:
       - type: file
         only-arches:
           - x86_64
-        url: https://github.com/bitwarden/clients/releases/download/cli-v2026.5.0/bw-oss-linux-2026.5.0.zip
-        sha256: f233e8fe83a49b73cd4b8de620190e5e76544793a32871e151b2238a59b7ec4e
+        url: https://github.com/bitwarden/clients/releases/download/cli-v2026.6.0/bw-oss-linux-2026.6.0.zip
+        sha256: e2bfcc307147487582e50b2e8bc8ede0982da4499fe727396a08188365c69637
         x-checker-data:
           type: anitya
           project-id: 229011
