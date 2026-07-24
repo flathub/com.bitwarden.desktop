@@ -108,8 +108,8 @@ modules:
       - type: file
         only-arches:
           - x86_64
-        url: https://github.com/bitwarden/clients/releases/download/cli-v2026.6.0/bw-oss-linux-2026.6.0.zip
-        sha256: e2bfcc307147487582e50b2e8bc8ede0982da4499fe727396a08188365c69637
+        url: https://github.com/bitwarden/clients/releases/download/cli-v2026.7.0/bw-oss-linux-2026.7.0.zip
+        sha256: d867a39c28ddd56c09a1a99bdbae3afbca4c295c918d41bbdac8ca25e9bf4073
         x-checker-data:
           type: anitya
           project-id: 229011
