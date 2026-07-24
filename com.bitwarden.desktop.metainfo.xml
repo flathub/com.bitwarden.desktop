@@ -45,7 +45,7 @@
   </categories>
   <screenshots>
     <screenshot type="default">
-      <image>https://res.cloudinary.com/bw-com/image/upload/f_auto/v1/ctf/7rncvj1f8mw7/1PO0QhQSXq0swBoa9dxpsn/11b3504508449f6b03b63a12e5632b48/Bitwarden-multiple-devices.webp</image>
+      <image>https://bitwarden.com/assets/XZp5wAmrJeP41sIS18dvQ/2929de21238c825d283ca567aaf98f24/Home_Hero_-_Light.png</image>
       <caption>Bitwarden on multiple devices</caption>
     </screenshot>
   </screenshots>
@@ -62,8 +62,11 @@
   </developer>
   <update_contact>hello@bitwarden.com</update_contact>
   <releases>
-    <release version="2026.6.1" date="2026-06-30">
+    <release version="2026.7.0" date="2026-07-23">
       <description></description>
+    </release>
+    <release version="2026.6.1" date="2026-06-30">
+      <description/>
     </release>
     <release version="2026.6.0" date="2026-06-25">
       <description/>
