@@ -5,6 +5,7 @@
   <launchable type="desktop-id">com.bitwarden.desktop.desktop</launchable>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>LicenseRef-proprietary</project_license>
+  <project_license>LicenseRef-proprietary=https://raw.githubusercontent.com/bitwarden/clients/refs/heads/main/LICENSE_BITWARDEN.txt</project_license>
   <name>Bitwarden</name>
   <summary>A secure and free password manager for all of your devices</summary>
   <description>
@@ -50,7 +51,6 @@
     </screenshot>
   </screenshots>
   <url type="homepage">https://www.bitwarden.com/</url>
-  <url type="license">https://github.com/bitwarden/clients/blob/main/LICENSE_BITWARDEN.txt</url>
   <url type="bugtracker">https://github.com/bitwarden/clients/issues/</url>
   <url type="faq">https://bitwarden.com/help/product-faqs/</url>
   <url type="help">https://bitwarden.com/help/</url>
