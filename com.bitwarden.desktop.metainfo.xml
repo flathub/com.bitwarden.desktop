@@ -50,6 +50,7 @@
     </screenshot>
   </screenshots>
   <url type="homepage">https://www.bitwarden.com/</url>
+  <url type="license">https://github.com/bitwarden/clients/blob/main/LICENSE_BITWARDEN.txt</url>
   <url type="bugtracker">https://github.com/bitwarden/clients/issues/</url>
   <url type="faq">https://bitwarden.com/help/product-faqs/</url>
   <url type="help">https://bitwarden.com/help/</url>
