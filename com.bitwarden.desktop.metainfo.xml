@@ -62,8 +62,11 @@
   </developer>
   <update_contact>hello@bitwarden.com</update_contact>
   <releases>
-    <release version="2026.10.0" date="2026-10-15">
+    <release version="2026.10.1" date="2026-10-23">
       <description></description>
+    </release>
+    <release version="2026.10.0" date="2026-10-15">
+      <description/>
     </release>
     <release version="2026.9.1" date="2026-10-01">
       <description/>
