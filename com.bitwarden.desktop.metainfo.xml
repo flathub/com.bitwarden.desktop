@@ -5,39 +5,30 @@
   <launchable type="desktop-id">com.bitwarden.desktop.desktop</launchable>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>LicenseRef-proprietary=https://raw.githubusercontent.com/bitwarden/clients/refs/heads/main/LICENSE_BITWARDEN.txt</project_license>
-  <name>Bitwarden</name>
-  <summary>A secure and free password manager for all of your devices</summary>
+  <name>Bitwarden Password Manager</name>
+  <summary>Secure your digital life</summary>
   <description>
     <p>
-      Bitwarden is the easiest and safest way to store all of your logins and
-      passwords while conveniently keeping them synced between all of your
-      devices.
+      Bitwarden is an open source password manager that secures your accounts
+      and protects from hackers and data breaches. Generate, save, and
+      autofill strong passwords for every account on every device.
     </p>
     <p>
-      Password theft is a serious problem. The websites and apps that you use
-      are under attack every day. Security breaches occur and your passwords
-      are stolen. When you reuse the same passwords across apps and websites
-      hackers can easily access your email, bank, and other important
-      accounts.
+      Keep passwords, passkeys, cards, secure notes, SSH keys, and identities
+      in an end-to-end encrypted vault that syncs across your phone, tablet,
+      computer, and every major browser.
     </p>
+    <p>Features:</p>
+    <ul>
+      <li>Autofill logins and passkeys</li>
+      <li>Generate strong passwords, usernames, and email aliases</li>
+      <li>Share logins with family or friends, or send encrypted text through a secure link</li>
+      <li>Store unlimited passwords and sync across unlimited devices</li>
+      <li>Choose between cloud or self-host deployments</li>
+    </ul>
     <p>
-      Security experts recommend that you use a different, randomly generated
-      password for every account that you create. But how do you manage all
-      those passwords? Bitwarden makes it easy for you to create, store, and
-      access your passwords.
-    </p>
-    <p>
-      Bitwarden stores all of your logins in an encrypted vault that syncs
-      across all of your devices. Since it's fully encrypted before it ever
-      leaves your device, only you have access to your data. Not even the
-      team at Bitwarden can read your data, even if we wanted to. Your data
-      is sealed with AES-256 bit encryption, salted hashing, and PBKDF2
-      SHA-256.
-    </p>
-    <p>
-      Bitwarden is 100% open source software. The source code for Bitwarden
-      is hosted on GitHub and everyone is free to review, audit, and
-      contribute to the Bitwarden codebase.
+      Bitwarden code is open source and can be viewed by anyone. Third-party
+      security audits are published annually.
     </p>
   </description>
   <categories>
